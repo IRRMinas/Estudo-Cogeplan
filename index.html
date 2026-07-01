@@ -283,6 +283,16 @@ details.fav>summary .fval{font-family:'IBM Plex Mono',monospace; font-size:12.5p
 .proc-row .pval{font-family:'IBM Plex Mono',monospace; font-weight:600;}
 .empty-tree{padding:28px; text-align:center; color:var(--ink-soft); font-size:13px;}
 
+.diag-panel{
+  margin-top:18px; border:1px dashed var(--line); border-radius:12px; padding:14px 18px;
+  background:var(--paper-dark);
+}
+.diag-panel summary{cursor:pointer; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+.diag-body{margin-top:14px; font-size:12.5px; line-height:1.6;}
+.diag-body table{background:#fff; border-radius:8px; overflow:hidden;}
+.diag-body td{padding:7px 10px !important; text-align:left !important; font-family:'IBM Plex Mono',monospace;}
+.diag-body th{text-align:left !important;}
+tr.diag-warn td{background:#FBEDEA; color:var(--red);}
 footer.app-footer{
   text-align:center; color:var(--ink-soft); font-size:11.5px; margin-top:34px; line-height:1.6;
 }
@@ -469,10 +479,16 @@ footer.app-footer a{color:var(--teal-light);}
 
   </div>
 
+  <details class="diag-panel">
+    <summary>🔧 Diagnóstico de colunas (abrir se algum valor parecer errado)</summary>
+    <div id="diagBody" class="diag-body">Carregando…</div>
+  </details>
+
   <footer class="app-footer">
     Fonte: base publicada no Google Sheets (CSV). Os valores são recalculados no navegador a cada atualização — nenhum dado é armazenado em servidor.<br>
     Regra de saldo: <span class="mono">A Liquidar = Despesas Empenhadas − Despesas Liquidadas</span>, somado por grupo.
   </footer>
+
 </div>
 
 <script>
@@ -550,31 +566,66 @@ function classify(classificacaoRaw, favorecido){
 
 /* =========================================================================
    COLUMN RESOLUTION (robust to header spelling variations)
+   Strategy: try name-based matching (stemmed, accent/punct-insensitive)
+   first; if a required field can't be matched by name, fall back to the
+   known fixed column position (A..W) described by the user's original
+   spreadsheet layout. Every resolution is logged into DIAG for the
+   on-screen diagnostics panel, so mismatches are visible instead of
+   silently producing zeros.
    ========================================================================= */
+const POSITIONS = {
+  favorecido:0, processo:3, pi:4, elemento:6,
+  aLiquidarCol:15, empenhadas:16, liquidadas:17,
+  classificacao:18, categoriaDias:21, categoriaTipo:22
+};
+let DIAG = { headers:[], fields:{} };
+
+function stem(h){
+  return normHeader(h).replace(/[^a-z0-9]+/g," ").trim();
+}
 function resolveColumns(headers){
-  const norm = headers.map(normHeader);
-  const find = (tests) => {
+  const norm = headers.map(stem);
+  DIAG = { headers: headers.slice(), fields:{} };
+
+  const byName = (tests, excludeTests=[]) => {
     for(let i=0;i<norm.length;i++){
       const h = norm[i];
-      if(tests.every(t => h.includes(t))) return headers[i];
+      if(tests.every(t => h.includes(t)) && !excludeTests.some(t => h.includes(t))) return headers[i];
     }
     return null;
   };
-  const findExact = (val) => {
+  const exact = (val) => {
     for(let i=0;i<norm.length;i++){ if(norm[i]===val) return headers[i]; }
     return null;
   };
+
+  const resolve = (key, nameFn) => {
+    let header = nameFn();
+    let method = "nome";
+    if(!header){
+      const pos = POSITIONS[key];
+      if(pos!==undefined && headers[pos]!==undefined){
+        header = headers[pos];
+        method = "posição (" + String.fromCharCode(65+pos) + ")";
+      } else {
+        method = "não encontrado";
+      }
+    }
+    DIAG.fields[key] = { header, method };
+    return header;
+  };
+
   return {
-    favorecido: find(["favorecido"]),
-    processo: find(["processo"]),
-    pi: findExact("pi"),
-    elemento: find(["elemento","despesa"]),
-    classificacao: find(["classificacao"]) && !find(["classificacao"]).toLowerCase().includes("categoria") ? find(["classificacao"]) : find(["classificacao"]),
-    empenhadas: find(["despesas","empenhadas"]) && !normHeader(find(["despesas","empenhadas"])||"").includes("liquidar") ? headers.filter(h=>{const n=normHeader(h);return n.includes("despesas")&&n.includes("empenhadas")&&!n.includes("liquidar");})[0] : null,
-    liquidadas: headers.filter(h=>{const n=normHeader(h);return n.includes("despesas")&&n.includes("liquidadas");})[0] || null,
-    aLiquidarCol: headers.filter(h=>{const n=normHeader(h);return n.includes("empenhadas")&&n.includes("liquidar");})[0] || null,
-    categoriaDias: find(["categoria","dias"]),
-    categoriaTipo: find(["categoria","tipo"]),
+    favorecido:  resolve("favorecido", () => byName(["favorecido"])),
+    processo:    resolve("processo",   () => byName(["processo"])),
+    pi:          resolve("pi",         () => exact("pi")),
+    elemento:    resolve("elemento",   () => byName(["elemento","despesa"])),
+    classificacao: resolve("classificacao", () => byName(["classificac"], ["categoria"])),
+    empenhadas:  resolve("empenhadas", () => byName(["despes","empenhad"], ["liquidar"])),
+    liquidadas:  resolve("liquidadas", () => byName(["despes","liquidad"], ["empenhad"])),
+    aLiquidarCol:resolve("aLiquidarCol", () => byName(["empenhad","liquidar"])),
+    categoriaDias: resolve("categoriaDias", () => byName(["categoria","dias"])),
+    categoriaTipo: resolve("categoriaTipo", () => byName(["categoria","tipo"])),
   };
 }
 
@@ -654,6 +705,39 @@ function buildRaw(rows, headers){
   renderPanel1();
   renderPanel2("P");
   renderPanel2("C");
+  renderDiagnostics();
+}
+
+/* =========================================================================
+   DIAGNOSTICS PANEL
+   ========================================================================= */
+const FIELD_LABELS = {
+  favorecido:"Favorecido", processo:"Núm. Processo", pi:"PI", elemento:"Elemento Despesa",
+  classificacao:"Classificação", empenhadas:"Despesas Empenhadas", liquidadas:"Despesas Liquidadas",
+  aLiquidarCol:"Despesas Empenhadas a Liquidar (bruta)", categoriaDias:"Categoria de Dias", categoriaTipo:"Categoria de Tipo"
+};
+function renderDiagnostics(){
+  const box = document.getElementById("diagBody");
+  const sumEmp = RAW.reduce((s,r)=>s+r.empenhadas,0);
+  const sumLiq = RAW.reduce((s,r)=>s+r.liquidadas,0);
+  let rowsHtml = Object.keys(FIELD_LABELS).map(key=>{
+    const f = DIAG.fields[key] || {header:null, method:"não encontrado"};
+    const warn = !f.header || f.method.includes("posição");
+    return `<tr class="${warn?'diag-warn':''}">
+      <td>${FIELD_LABELS[key]}</td>
+      <td class="mono">${f.header ? f.header : '<em>não encontrado</em>'}</td>
+      <td class="mono">${f.method}</td>
+    </tr>`;
+  }).join("");
+  box.innerHTML = `
+    <p>Total de colunas detectadas no CSV: <strong>${DIAG.headers.length}</strong> · Total de linhas: <strong>${RAW.length.toLocaleString('pt-BR')}</strong></p>
+    <table class="ledger" style="font-size:12px;"><thead><tr><th style="text-align:left;">Campo</th><th style="text-align:left;">Coluna do CSV usada</th><th style="text-align:left;">Como foi encontrada</th></tr></thead>
+    <tbody>${rowsHtml}</tbody></table>
+    <p style="margin-top:12px;">Checagem rápida — soma bruta (sem filtros) de <strong>Despesas Empenhadas</strong>: <span class="mono">${fmtBRL(sumEmp)}</span> · <strong>Despesas Liquidadas</strong>: <span class="mono">${fmtBRL(sumLiq)}</span>. ${sumEmp===0?'<strong style="color:var(--red)">⚠ Empenhadas somou zero — a coluna provavelmente não foi encontrada corretamente; confira o nome exato dela na sua planilha.</strong>':''}</p>
+    <details style="margin-top:10px;"><summary style="cursor:pointer; font-size:12px; color:var(--ink-soft);">ver todos os cabeçalhos brutos do CSV</summary>
+      <div class="mono" style="font-size:11px; margin-top:8px; line-height:1.7; word-break:break-word;">${DIAG.headers.map((h,i)=>`<div>${String.fromCharCode(65+i)}: ${h}</div>`).join("")}</div>
+    </details>
+  `;
 }
 
 /* =========================================================================
