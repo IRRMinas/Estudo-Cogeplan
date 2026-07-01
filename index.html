@@ -357,7 +357,6 @@ footer.app-footer a{color:var(--teal-light);}
 
   <div class="sheet">
 
-    <!-- ===================== PAINEL 1 ===================== -->
     <div class="tabpanel active" id="tab-consumo">
 
       <div class="filterbar">
@@ -395,7 +394,6 @@ footer.app-footer a{color:var(--teal-light);}
       </div>
     </div>
 
-    <!-- ===================== PAINEL 2 ===================== -->
     <div class="tabpanel" id="tab-dias">
 
       <div class="subtabs">
@@ -403,7 +401,6 @@ footer.app-footer a{color:var(--teal-light);}
         <button class="subtab-btn" data-sub="consumo2">Material de consumo</button>
       </div>
 
-      <!-- ---- sub: pontuais ---- -->
       <div class="subpanel" id="sub-pontuais">
         <div class="filterbar">
           <div class="filter-group">
@@ -439,7 +436,6 @@ footer.app-footer a{color:var(--teal-light);}
         <div class="tree" id="treeP"></div>
       </div>
 
-      <!-- ---- sub: consumo2 ---- -->
       <div class="subpanel" id="sub-consumo2" style="display:none;">
         <div class="filterbar">
           <div class="filter-group">
@@ -486,7 +482,7 @@ footer.app-footer a{color:var(--teal-light);}
 
   <footer class="app-footer">
     Fonte: base publicada no Google Sheets (CSV). Os valores são recalculados no navegador a cada atualização — nenhum dado é armazenado em servidor.<br>
-    Regra de saldo: <span class="mono">A Liquidar = Despesas Empenhadas − Despesas Liquidadas</span>, somado por grupo.
+    Regra de saldo: <span class="mono">A Liquidar nativo da coluna P</span>, somado por grupo.
   </footer>
 
 </div>
@@ -565,13 +561,7 @@ function classify(classificacaoRaw, favorecido){
 }
 
 /* =========================================================================
-   COLUMN RESOLUTION (robust to header spelling variations)
-   Strategy: try name-based matching (stemmed, accent/punct-insensitive)
-   first; if a required field can't be matched by name, fall back to the
-   known fixed column position (A..W) described by the user's original
-   spreadsheet layout. Every resolution is logged into DIAG for the
-   on-screen diagnostics panel, so mismatches are visible instead of
-   silently producing zeros.
+   COLUMN RESOLUTION
    ========================================================================= */
 const POSITIONS = {
   favorecido:0, processo:3, pi:4, elemento:6,
@@ -616,14 +606,14 @@ function resolveColumns(headers){
   };
 
   return {
-    favorecido:  resolve("favorecido", () => byName(["favorecido"])),
-    processo:    resolve("processo",   () => byName(["processo"])),
-    pi:          resolve("pi",         () => exact("pi")),
-    elemento:    resolve("elemento",   () => byName(["elemento","despesa"])),
+    favorecido:    resolve("favorecido", () => byName(["favorecido"])),
+    processo:      resolve("processo",   () => byName(["processo"])),
+    pi:            resolve("pi",         () => exact("pi")),
+    elemento:      resolve("elemento",   () => byName(["elemento","despesa"])),
     classificacao: resolve("classificacao", () => byName(["classificac"], ["categoria"])),
-    empenhadas:  resolve("empenhadas", () => byName(["despes","empenhad"], ["liquidar"])),
-    liquidadas:  resolve("liquidadas", () => byName(["despes","liquidad"], ["empenhad"])),
-    aLiquidarCol:resolve("aLiquidarCol", () => byName(["empenhad","liquidar"])),
+    empenhadas:    resolve("empenhadas", () => byName(["despes","empenhad"], ["liquidar"])),
+    liquidadas:    resolve("liquidadas", () => byName(["despes","liquidad"], ["empenhad"])),
+    aLiquidarCol:  resolve("aLiquidarCol", () => byName(["empenhad","liquidar"])),
     categoriaDias: resolve("categoriaDias", () => byName(["categoria","dias"])),
     categoriaTipo: resolve("categoriaTipo", () => byName(["categoria","tipo"])),
   };
@@ -677,6 +667,7 @@ function buildRaw(rows, headers){
     const elemento = String(r[cols.elemento]||"").trim();
     const empenhadas = parseNum(r[cols.empenhadas]);
     const liquidadas = parseNum(r[cols.liquidadas]);
+    const aLiquidar = parseNum(r[cols.aLiquidarCol]); // Resgata nativo da coluna P
     const favorecido = String(r[cols.favorecido]||"").trim() || "NÃO INFORMADO";
     return {
       favorecido,
@@ -686,7 +677,7 @@ function buildRaw(rows, headers){
       classificacaoRaw: r[cols.classificacao],
       categoria: classify(r[cols.classificacao], favorecido),
       empenhadas, liquidadas,
-      aLiquidar: empenhadas - liquidadas,
+      aLiquidar,
       categoriaDias: String(r[cols.categoriaDias]||"").trim() || null,
       tipo: normTipo(r[cols.categoriaTipo]),
     };
@@ -744,7 +735,6 @@ function renderDiagnostics(){
    FILTER WIDGETS
    ========================================================================= */
 const defaults = { "1": ["30"], "P": [], "C": ["30"] };
-defaults["P"] = ELEMENTOS; // filled after load, corrected below
 
 function buildElementoChips(containerId, target, checkedList){
   const el = document.getElementById(containerId);
@@ -793,7 +783,6 @@ function onFilterChange(target){
   if(target==="C") renderPanel2("C");
 }
 
-/* segmented tipo controls */
 function setupSeg(segId, cb){
   const seg = document.getElementById(segId);
   seg.querySelectorAll("button").forEach(b=>{
@@ -823,29 +812,30 @@ function renderPanel1(){
 
   const order = ["Condominiais","Diárias e passagens","Material de Consumo","Pessoas","Serviços","Serviços Fiotec"];
   const agg = {};
-  order.forEach(c=>agg[c] = {emp:0, liq:0});
+  order.forEach(c=>agg[c] = {emp:0, liq:0, aliq:0});
   rows.forEach(r=>{
     if(!agg[r.categoria]) return;
     agg[r.categoria].emp += r.empenhadas;
     agg[r.categoria].liq += r.liquidadas;
+    agg[r.categoria].aliq += r.aLiquidar;
   });
 
   const tbody = document.querySelector("#tableConsumo tbody");
   const tfoot = document.querySelector("#tableConsumo tfoot");
   tbody.innerHTML = "";
-  let totEmp=0, totLiq=0;
+  let totEmp=0, totLiq=0, totAliq=0;
   const chartLabels=[], chartData=[], chartColors=[];
   order.forEach(cat=>{
-    const emp = agg[cat].emp, liq = agg[cat].liq, aliq = emp-liq;
+    const emp = agg[cat].emp, liq = agg[cat].liq, aliq = agg[cat].aliq;
     const pct = emp!==0 ? aliq/emp : 0;
-    totEmp += emp; totLiq += liq;
+    totEmp += emp; totLiq += liq; totAliq += aliq;
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${cat}</td><td>${fmtNum(emp)}</td><td>${fmtNum(liq)}</td><td>${fmtNum(aliq)}</td>
       <td><span class="stamp ${stampClass(pct)}">${fmtPct(pct)}</span></td>`;
     tbody.appendChild(tr);
     chartLabels.push(cat); chartData.push(+(pct*100).toFixed(2)); chartColors.push(CAT_COLORS[cat]);
   });
-  const totAliq = totEmp-totLiq, totPct = totEmp!==0 ? totAliq/totEmp : 0;
+  const totPct = totEmp!==0 ? totAliq/totEmp : 0;
   tfoot.innerHTML = `<tr><td>Total geral</td><td>${fmtNum(totEmp)}</td><td>${fmtNum(totLiq)}</td><td>${fmtNum(totAliq)}</td>
     <td><span class="stamp ${stampClass(totPct)}">${fmtPct(totPct)}</span></td></tr>`;
 
