@@ -520,13 +520,14 @@ function processMatrix(matrix){
 
   RAW = dataRows.map((row, idx) => {
     // Mapeamento Direto Painel 1 (Base Retificada)
-    const favP1 = String(row[0] || "").trim(); // Coluna A
-    const piP1 = String(row[3] || "").trim(); // Coluna D
-    const elemP1 = String(row[4] || "").trim(); // Coluna E
-    const empP1 = parseNum(row[7]); // Coluna H
-    const liqP1 = parseNum(row[8]); // Coluna I
-    const aliqP1 = parseNum(row[9]); // Coluna J
-    let classP1 = String(row[10] || "").trim(); // Coluna K
+    const favP1 = String(row[0] || "").trim();    // Coluna A
+    const procP1 = String(row[2] || "").trim();   // Coluna C (Adicionado/Garantido aqui)
+    const piP1 = String(row[3] || "").trim();     // Coluna D
+    const elemP1 = String(row[4] || "").trim();   // Coluna E
+    const empP1 = parseNum(row[7]);               // Coluna H
+    const liqP1 = parseNum(row[8]);               // Coluna I
+    const aliqP1 = parseNum(row[9]);              // Coluna J
+     let classP1 = String(row[10] || "").trim();   // Coluna K
 
     // Regra do Filtro Especial da FIOTEC
     if(favP1.toUpperCase().includes("FIOTEC - FUNDACAO PARA O DESENVOLVIMENTO")){
@@ -548,7 +549,7 @@ function processMatrix(matrix){
     if(rawTipo.includes("continuo")) tipoP2 = "continuo";
 
     return {
-      favP1, piP1, elemP1, empP1, liqP1, aliqP1, classP1,
+      favP1, procP1, piP1, elemP1, empP1, liqP1, aliqP1, classP1,
       elemP2, favP2, piP2, procP2, saldoP2, agingP2, tipoP2
     };
   }).filter(r => r.elemP1 !== "" || r.elemP2 !== "");
@@ -663,7 +664,7 @@ document.querySelectorAll(".chip-actions button").forEach(btn => {
 });
 
 /* =========================================================================
-   RENDERIZAÇÃO PAINEL 01
+   RENDERIZAÇÃO PAINEL 01 - ATUALIZADO (Múltiplos Valores e Coluna C)
    ========================================================================= */
 function renderPanel1(){
   const checkedElems = [...document.querySelectorAll("#chipsElemento1 input:checked")].map(i=>i.value);
@@ -706,43 +707,68 @@ function renderPanel1(){
 
     const pctGrupo = dataGrupo.emp !== 0 ? (dataGrupo.aliq / dataGrupo.emp) : 0;
 
-    // Agrupamento interno para a Tabela Dinâmica Expandível (Favorecido -> Processo)
+    // Agrupamento interno: Classificação -> Favorecido -> Processo (Coluna C)
     const favSubMap = {};
     dataGrupo.records.forEach(r => {
       const fName = r.favP1 || "NÃO INFORMADO";
-      if(!favSubMap[fName]) favSubMap[fName] = { empenhado:0, aLiquidar:0, procs:{} };
+      if(!favSubMap[fName]) favSubMap[fName] = { empenhado:0, liquidado:0, aLiquidar:0, procs:{} };
       favSubMap[fName].empenhado += r.empP1;
+      favSubMap[fName].liquidado += r.liqP1;
       favSubMap[fName].aLiquidar += r.aliqP1;
       
-      const pKey = r.favP1.toUpperCase().includes("FIOTEC") ? ("Proc: " + (r.piP1 || "—")) : ("Item/Proc: " + (r.elemP1 || "—"));
-      favSubMap[fName].procs[pKey] = (favSubMap[fName].procs[pKey] || 0) + r.aliqP1;
+      // Armazena o número do processo (vindo da Coluna C através do mapeamento da matriz)
+      const pKey = r.procP1 || "—"; 
+      if(!favSubMap[fName].procs[pKey]) favSubMap[fName].procs[pKey] = { emp:0, liq:0, aliq:0 };
+      favSubMap[fName].procs[pKey].emp += r.empP1;
+      favSubMap[fName].procs[pKey].liq += r.liqP1;
+      favSubMap[fName].procs[pKey].aliq += r.aliqP1;
     });
 
+    // Montagem do HTML dos Favorecidos (Nível 2)
     const favHtml = Object.entries(favSubMap).sort((a,b)=>b[1].aLiquidar - a[1].aLiquidar).map(([favName, obj])=>{
-      const procHtml = Object.entries(obj.procs).sort((a,b)=>b[1]-a[1]).map(([pName, vSaldo])=>`
-        <div class="proc-row"><span class="pname">${pName}</span><span class="pval">${fmtBRL(vSaldo)}</span></div>
-      `).join("");
+      const pctFav = obj.empenhado !== 0 ? (obj.aLiquidar / obj.empenhado) : 0;
 
-      return `<details class="fav">
-        <summary>
-          <span class="arrow">▸</span>
-          <span class="fname">${favName}</span>
-          <span class="fval" style="margin-right:12px;">Emp: ${fmtNum(obj.empenhado)}</span>
-          <span class="fextra">A Liq: <strong>${fmtBRL(obj.aLiquidar)}</strong></span>
-        </summary>
-        ${procHtml}
-      </details>`;
+      // Montagem do HTML dos Processos Reais da Coluna C (Nível 3)
+      const procHtml = Object.entries(obj.procs).sort((a,b)=>b[1].aliq - a[1].aliq).map(([procNum, v]) => {
+        const pctProc = v.emp !== 0 ? (v.aliq / v.emp) : 0;
+        return `
+          <div class="proc-row">
+            <span class="pname" style="font-weight:600; color:var(--teal);">Proc: ${procNum}</span>
+            <span class="pval" style="color:var(--ink-soft); font-size:11.5px;">
+              Emp: ${fmtNum(v.emp)} | Liq: ${fmtNum(v.liq)} | A Liq: <strong style="color:var(--ink); font-size:12.5px;">${fmtBRL(v.aliq)}</strong>
+              <span class="stamp ${stampClass(pctProc)}" style="padding:1px 6px; font-size:10.5px; min-width:45px; margin-left:8px; border-width:1px;">${fmtPct(pctProc)}</span>
+            </span>
+          </div>`;
+      }).join("");
+
+      return `
+        <details class="fav">
+          <summary style="display:flex; align-items:center; justify-content:between; width:100%;">
+            <span class="arrow">▸</span>
+            <span class="fname" style="max-width:350px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${favName}</span>
+            <span class="fextra" style="flex:1; text-align:right; padding-right:10px; font-family:'IBM Plex Mono',monospace; font-size:12px;">
+              Emp: ${fmtNum(obj.empenhado)} | Liq: ${fmtNum(obj.liquidado)} | Saldo: <strong style="color:var(--gold); font-size:13px;">${fmtBRL(obj.aLiquidar)}</strong>
+            </span>
+            <span class="stamp ${stampClass(pctFav)}" style="transform: scale(0.85); margin-right:5px;">${fmtPct(pctFav)}</span>
+          </summary>
+          <div style="background:#fcfbf9;">${procHtml}</div>
+        </details>`;
     }).join("");
 
+    // Montagem do Grupo de Classificação Principal (Nível 1)
     const bucketDetails = document.createElement("details");
     bucketDetails.className = "bucket";
     bucketDetails.innerHTML = `
-      <summary>
+      <summary style="display:flex; align-items:center; justify-content:between; width:100%;">
         <span class="arrow">▸</span>
         <span class="btag" style="background:${getChartColor(colorIdx)}"></span>
-        <span class="bname">${cat}</span>
-        <span class="stamp ${stampClass(pctGrupo)}" style="margin-right:15px; transform: scale(0.9);">${fmtPct(pctGrupo)}</span>
-        <span class="bcount">Saldo: ${fmtBRL(dataGrupo.aliq)}</span>
+        <span class="bname" style="font-size:14px; font-weight:700;">${cat}</span>
+        <span class="bvals" style="flex:1; text-align:right; padding-right:15px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft);">
+          Empenhado: <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.emp)}</span> | 
+          Liquidado: <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.liq)}</span> | 
+          A Liquidar: <span style="color:var(--teal); font-weight:700;">${fmtBRL(dataGrupo.aliq)}</span>
+        </span>
+        <span class="stamp ${stampClass(pctGrupo)}" style="transform: scale(0.95); margin-right:5px;">${fmtPct(pctGrupo)}</span>
       </summary>
       <div style="padding: 4px 0; background: #fff;">${favHtml}</div>
     `;
