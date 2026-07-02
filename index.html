@@ -427,6 +427,9 @@ footer.app-footer a{color:var(--teal-light);}
               <button data-val="continuo">Contínuo</button>
               <button data-val="todos">Todos</button>
             </div>
+            <!-- Novo Seletor de PI no painel 2 abaixo do Tipo -->
+            <span class="filter-label" style="margin-top: 8px;">PI (coluna E)</span>
+            <select class="pi-select" id="piSelectP"></select>
           </div>
           <div class="filter-group">
             <span class="filter-label">Buscar favorecido / processo</span>
@@ -462,6 +465,9 @@ footer.app-footer a{color:var(--teal-light);}
               <button data-val="continuo">Contínuo</button>
               <button data-val="todos" class="active">Todos</button>
             </div>
+            <!-- Novo Seletor de PI no painel 2 abaixo do Tipo -->
+            <span class="filter-label" style="margin-top: 8px;">PI (coluna E)</span>
+            <select class="pi-select" id="piSelectC"></select>
           </div>
           <div class="filter-group">
             <span class="filter-label">Buscar favorecido / processo</span>
@@ -818,10 +824,26 @@ document.querySelectorAll(".chip-actions button").forEach(btn=>{
 });
 
 function buildPiSelect(){
-  const sel = document.getElementById("piSelect1");
-  sel.innerHTML = `<option value="__todos__">Todos os PI</option>` + PIS.map(p=>`<option value="${p}">${p}</option>`).join("");
-  sel.value = PIS.includes("A1IRR") ? "A1IRR" : "__todos__";
-  sel.addEventListener("change", renderPanel1);
+  const optionsHtml = `<option value="__todos__">Todos os PI</option>` + PIS.map(p=>`<option value="${p}">${p}</option>`).join("");
+  const defaultPi = PIS.includes("A1IRR") ? "A1IRR" : "__todos__";
+
+  // Vincula seletor do Painel 01
+  const sel1 = document.getElementById("piSelect1");
+  sel1.innerHTML = optionsHtml;
+  sel1.value = defaultPi;
+  sel1.addEventListener("change", renderPanel1);
+
+  // Vincula seletor de Contratos Pontuais (Painel 02)
+  const selP = document.getElementById("piSelectP");
+  selP.innerHTML = optionsHtml;
+  selP.value = defaultPi;
+  selP.addEventListener("change", () => renderPanel2("P"));
+
+  // Vincula seletor de Material de Consumo (Painel 02)
+  const selC = document.getElementById("piSelectC");
+  selC.innerHTML = optionsHtml;
+  selC.value = defaultPi;
+  selC.addEventListener("change", () => renderPanel2("C"));
 }
 
 function onFilterChange(target){
@@ -943,12 +965,15 @@ function renderPanel2(target){
   const kpiId = isP ? "kpiRowP" : "kpiRowC";
   const agingId = isP ? "agingP" : "agingC";
   const treeId = isP ? "treeP" : "treeC";
+  const piId = isP ? "piSelectP" : "piSelectC";
 
   const elementos = getCheckedElementos(elChips);
   const tipo = getSegVal(seg);
   const search = normHeader(document.getElementById(searchId).value);
+  const pi = document.getElementById(piId).value;
 
   let rows = RAW.filter(r => elementos.includes(r.elemento) && r.categoriaDias);
+  if(pi !== "__todos__") rows = rows.filter(r=>r.pi === pi);
   if(tipo !== "todos") rows = rows.filter(r=>r.tipo === tipo);
   if(search) rows = rows.filter(r => normHeader(r.favorecido).includes(search) || normHeader(r.processo).includes(search));
 
