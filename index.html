@@ -19,9 +19,9 @@
   --teal-light:#175951;
   --gold:#C08A2E;
   --gold-light:#E4B65A;
-  --green:#3E7C59;
+  --green:#2A6B43;
   --amber:#C98A2B;
-  --red:#B5453B;
+  --red:#A8322A;
   --line: rgba(27,38,32,0.14);
   --card:#FFFFFF;
   --shadow: 0 1px 2px rgba(27,38,32,.06), 0 8px 24px -12px rgba(27,38,32,.18);
@@ -29,9 +29,7 @@
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
-  background:
-    radial-gradient(ellipse 1200px 500px at 15% -10%, rgba(14,59,54,.05), transparent 60%),
-    var(--paper);
+  background: radial-gradient(ellipse 1200px 500px at 15% -10%, rgba(14,59,54,.05), transparent 60%), var(--paper);
   color:var(--ink);
   font-family:'Inter',system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;
@@ -39,11 +37,8 @@ body{
 }
 .mono{font-family:'IBM Plex Mono',monospace; font-variant-numeric: tabular-nums;}
 h1,h2,h3,.display{font-family:'Fraunces',serif;}
-
-/* ===== layout shell ===== */
 .wrap{max-width:1280px;margin:0 auto;padding:28px 24px 80px;}
 
-/* ===== header (ledger cover) ===== */
 .masthead{
   background: linear-gradient(155deg, var(--teal) 0%, var(--teal-light) 100%);
   border-radius:18px;
@@ -67,9 +62,7 @@ h1,h2,h3,.display{font-family:'Fraunces',serif;}
 .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
 .masthead h1{font-size:32px; font-weight:600; margin:0 0 6px; letter-spacing:-.01em;}
 .masthead p{margin:0; color:rgba(243,239,227,.72); font-size:14.5px; max-width:620px; line-height:1.5;}
-.head-meta{
-  display:flex; align-items:center; gap:14px; margin-top:20px; flex-wrap:wrap;
-}
+.head-meta{display:flex; align-items:center; gap:14px; margin-top:20px; flex-wrap:wrap;}
 .pill-status{
   display:inline-flex; align-items:center; gap:7px;
   background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16);
@@ -88,56 +81,33 @@ h1,h2,h3,.display{font-family:'Fraunces',serif;}
 .btn-refresh.spinning svg{animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* ===== ledger tab navigation ===== */
-.ledger-tabs{
-  display:flex; gap:6px; margin-top:26px; padding:0 4px;
-}
+.ledger-tabs{display:flex; gap:6px; margin-top:26px; padding:0 4px;}
 .ledger-tab{
   flex:1; position:relative; cursor:pointer; user-select:none;
-  background: var(--paper-dark);
-  border:1px solid var(--line);
-  border-bottom:none;
-  border-radius:12px 12px 0 0;
-  padding:15px 20px 14px;
-  transition:.15s;
+  background: var(--paper-dark); border:1px solid var(--line); border-bottom:none;
+  border-radius:12px 12px 0 0; padding:15px 20px 14px; transition:.15s;
 }
 .ledger-tab .tnum{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); letter-spacing:.08em;}
 .ledger-tab .ttitle{font-family:'Fraunces',serif; font-size:16.5px; font-weight:600; margin-top:3px;}
 .ledger-tab .tsub{font-size:12px; color:var(--ink-soft); margin-top:2px;}
-.ledger-tab.active{
-  background:var(--card);
-  border-color:var(--line);
-  box-shadow: 0 -2px 0 var(--gold) inset;
-}
+.ledger-tab.active{background:var(--card); border-color:var(--line); box-shadow: 0 -2px 0 var(--gold) inset;}
 .ledger-tab.active .ttitle{color:var(--teal);}
 .ledger-tab:not(.active):hover{background:#F1EBDB;}
 
-.sheet{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:0 12px 12px 12px;
-  box-shadow:var(--shadow);
-  padding:28px;
-}
+.sheet{background:var(--card); border:1px solid var(--line); border-radius:0 12px 12px 12px; box-shadow:var(--shadow); padding:28px;}
 .tabpanel{display:none;}
 .tabpanel.active{display:block;}
 
-/* ===== filter bar ===== */
 .filterbar{
   display:flex; flex-wrap:wrap; gap:22px; align-items:flex-start;
-  background: var(--paper-dark);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:16px 20px;
-  margin-bottom:22px;
+  background: var(--paper-dark); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:22px;
 }
 .filter-group{display:flex; flex-direction:column; gap:8px;}
 .filter-label{font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-soft); font-weight:700;}
-.chip-row{display:flex; flex-wrap:wrap; gap:6px; max-width:520px;}
+.chip-row{display:flex; flex-wrap:wrap; gap:6px; max-width:560px;}
 .chip{
   display:inline-flex; align-items:center; gap:6px;
-  border:1px solid var(--line); background:#fff;
-  padding:5px 11px; border-radius:100px; font-size:12.5px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; padding:5px 11px; border-radius:100px; font-size:12.5px; cursor:pointer;
   font-family:'IBM Plex Mono',monospace; transition:.12s;
 }
 .chip input{accent-color:var(--teal); margin:0; width:12px; height:12px;}
@@ -164,12 +134,10 @@ select.pi-select{
 }
 .search-input:focus, select:focus, .chip input:focus{outline:2px solid var(--gold); outline-offset:1px;}
 
-/* ===== KPI cards ===== */
 .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px;}
 .kpi{
   border:1px solid var(--line); border-radius:12px; padding:16px 18px;
-  background:linear-gradient(180deg,#fff, #FCFAF4);
-  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,#fff, #FCFAF4); position:relative; overflow:hidden;
 }
 .kpi .klabel{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); font-weight:700;}
 .kpi .kval{font-family:'Fraunces',serif; font-size:24px; font-weight:600; margin-top:6px; color:var(--teal);}
@@ -177,8 +145,7 @@ select.pi-select{
 .kpi.accent .kval{color:var(--gold);}
 .kpi.danger .kval{color:var(--red);}
 
-/* ===== content grid ===== */
-.grid-2{display:grid; grid-template-columns:1.35fr 1fr; gap:24px; align-items:start;}
+.grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:24px; align-items:start;}
 @media (max-width:920px){.grid-2{grid-template-columns:1fr;}}
 
 .section-title{
@@ -190,45 +157,36 @@ select.pi-select{
   padding:2px 7px; border-radius:5px; letter-spacing:.05em;
 }
 
-/* ===== table ===== */
 table.ledger{width:100%; border-collapse:collapse; font-size:13px;}
 table.ledger thead th{
   text-align:right; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em;
   color:var(--ink-soft); font-weight:700; padding:0 10px 10px; border-bottom:2px solid var(--ink);
 }
 table.ledger thead th:first-child{text-align:left;}
-table.ledger tbody td{
-  padding:11px 10px; text-align:right; border-bottom:1px solid var(--line);
-  font-family:'IBM Plex Mono',monospace; font-size:12.5px;
-}
-table.ledger tbody td:first-child{
-  text-align:left; font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--ink);
-}
+table.ledger tbody td{padding:11px 10px; text-align:right; border-bottom:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:12.5px;}
+table.ledger tbody td:first-child{text-align:left; font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--ink);}
 table.ledger tbody tr:hover td{background:#FBF8EF;}
-table.ledger tfoot td{
-  padding:12px 10px; text-align:right; border-top:2px solid var(--ink);
-  font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;
-}
+table.ledger tfoot td{padding:12px 10px; text-align:right; border-top:2px solid var(--ink); font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;}
 table.ledger tfoot td:first-child{text-align:left; font-family:'Fraunces',serif; font-size:14px;}
 
+/* Destaque aprimorado na porcentagem */
 .stamp{
   display:inline-flex; align-items:center; justify-content:center;
-  min-width:62px; padding:3px 8px; border-radius:6px; font-weight:700;
-  font-family:'IBM Plex Mono',monospace; font-size:12px;
-  border:1.5px solid currentColor;
+  min-width:68px; padding:5px 10px; border-radius:20px; font-weight:800;
+  font-family:'IBM Plex Mono',monospace; font-size:13px;
+  border: 2px solid currentColor; box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
-.stamp.low{color:var(--green);}
-.stamp.mid{color:var(--amber);}
-.stamp.high{color:var(--red);}
+.stamp.low{color:var(--green); background-color: rgba(42,107,67,0.06);}
+.stamp.mid{color:var(--amber); background-color: rgba(201,138,43,0.06);}
+.stamp.high{color:var(--red); background-color: rgba(168,50,42,0.06);}
 
-.chart-box{position:relative; height:300px;}
+.chart-box{position:relative; height:320px;}
 .note{
   font-size:12px; color:var(--ink-soft); line-height:1.55; margin-top:16px;
   border-left:3px solid var(--gold); padding:8px 0 8px 14px;
 }
 .note code{background:var(--paper-dark); padding:1px 5px; border-radius:4px; font-size:11.5px;}
 
-/* ===== sub tabs (dias a liquidar) ===== */
 .subtabs{display:flex; gap:8px; margin-bottom:20px;}
 .subtab-btn{
   border:1px solid var(--line); background:#fff; padding:10px 18px; border-radius:9px;
@@ -236,7 +194,6 @@ table.ledger tfoot td:first-child{text-align:left; font-family:'Fraunces',serif;
 }
 .subtab-btn.active{background:var(--teal); color:#fff; border-color:var(--teal);}
 
-/* ===== aging bars ===== */
 .aging-list{display:flex; flex-direction:column; gap:10px; margin-bottom:26px;}
 .aging-row{display:grid; grid-template-columns:110px 1fr 130px 46px; align-items:center; gap:12px;}
 .aging-name{font-size:12.5px; font-weight:600;}
@@ -245,9 +202,9 @@ table.ledger tfoot td:first-child{text-align:left; font-family:'Fraunces',serif;
 .aging-val{font-family:'IBM Plex Mono',monospace; font-size:12.5px; text-align:right;}
 .aging-count{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); text-align:right;}
 
-/* ===== drilldown tree ===== */
+/* Estilo Árvore Dinâmica Dinâmica */
 .tree-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px; flex-wrap:wrap;}
-.tree{border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+.tree{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff;}
 details.bucket{border-bottom:1px solid var(--line);}
 details.bucket:last-child{border-bottom:none;}
 details.bucket>summary{
@@ -255,25 +212,24 @@ details.bucket>summary{
   background:var(--paper-dark); font-weight:700; font-size:13.5px;
 }
 details.bucket>summary::-webkit-details-marker{display:none;}
-details.bucket>summary .arrow{transition:.15s; font-size:11px; color:var(--ink-soft);}
+details.bucket>summary .arrow{transition:.15s; font-size:11px; color:var(--ink-soft); font-weight:bold;}
 details.bucket[open]>summary .arrow{transform:rotate(90deg);}
-details.bucket>summary .btag{
-  width:9px; height:9px; border-radius:50%; flex-shrink:0;
-}
+details.bucket>summary .btag{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
 details.bucket>summary .bname{flex:1;}
 details.bucket>summary .bval{font-family:'IBM Plex Mono',monospace; font-size:13px;}
-details.bucket>summary .bcount{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); min-width:70px; text-align:right;}
+details.bucket>summary .bcount{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); min-width:85px; text-align:right;}
 
-details.fav{border-top:1px solid var(--line);}
+details.fav{border-top:1px solid var(--line); background:#fff;}
 details.fav>summary{
   list-style:none; cursor:pointer; padding:10px 18px 10px 34px; display:flex; align-items:center; gap:10px;
-  font-size:12.8px; font-weight:600; background:#fff;
+  font-size:12.8px; font-weight:600;
 }
 details.fav>summary::-webkit-details-marker{display:none;}
-details.fav>summary .arrow{font-size:10px; color:var(--ink-soft); transition:.15s;}
+details.fav>summary .arrow{font-size:10px; color:var(--ink-soft); transition:.15s; font-weight:bold;}
 details.fav[open]>summary .arrow{transform:rotate(90deg);}
 details.fav>summary .fname{flex:1; font-family:'Inter',sans-serif;}
-details.fav>summary .fval{font-family:'IBM Plex Mono',monospace; font-size:12.5px;}
+details.fav>summary .fval{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft);}
+details.fav>summary .fextra{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); text-align:right; min-width:140px;}
 
 .proc-row{
   display:flex; justify-content:space-between; padding:8px 18px 8px 54px; font-size:12px;
@@ -283,20 +239,14 @@ details.fav>summary .fval{font-family:'IBM Plex Mono',monospace; font-size:12.5p
 .proc-row .pval{font-family:'IBM Plex Mono',monospace; font-weight:600;}
 .empty-tree{padding:28px; text-align:center; color:var(--ink-soft); font-size:13px;}
 
-.diag-panel{
-  margin-top:18px; border:1px dashed var(--line); border-radius:12px; padding:14px 18px;
-  background:var(--paper-dark);
-}
+.diag-panel{margin-top:18px; border:1px dashed var(--line); border-radius:12px; padding:14px 18px; background:var(--paper-dark);}
 .diag-panel summary{cursor:pointer; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
 .diag-body{margin-top:14px; font-size:12.5px; line-height:1.6;}
 .diag-body table{background:#fff; border-radius:8px; overflow:hidden;}
 .diag-body td{padding:7px 10px !important; text-align:left !important; font-family:'IBM Plex Mono',monospace;}
 .diag-body th{text-align:left !important;}
 tr.diag-warn td{background:#FBEDEA; color:var(--red);}
-footer.app-footer{
-  text-align:center; color:var(--ink-soft); font-size:11.5px; margin-top:34px; line-height:1.6;
-}
-footer.app-footer a{color:var(--teal-light);}
+footer.app-footer{text-align:center; color:var(--ink-soft); font-size:11.5px; margin-top:34px; line-height:1.6;}
 
 .loading-overlay{
   position:fixed; inset:0; background:var(--paper); z-index:50;
@@ -321,15 +271,15 @@ footer.app-footer a{color:var(--teal-light);}
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <p>Carregando dados da planilha…</p>
+  <p>Carregando base retificada do Google Sheets…</p>
 </div>
 
 <div class="wrap">
 
   <div class="masthead">
     <div class="eyebrow"><span class="dot"></span> COGEPLAN · Instituto René Rachou / Fiocruz</div>
-    <h1>Painel de Execução Orçamentária</h1>
-    <p>Acompanhamento de despesas empenhadas, liquidadas e saldos a liquidar, atualizado diretamente a partir da base de dados publicada no Google Sheets.</p>
+    <h1>Material de Consumo</h1>
+    <p>Acompanhamento analítico orçamentário executado dinamicamente no navegador a partir de dados separados por vírgula.</p>
     <div class="head-meta">
       <span class="pill-status" id="statusPill"><span class="led"></span><span id="statusText">conectando…</span></span>
       <button class="btn-refresh" id="btnRefresh">
@@ -346,7 +296,7 @@ footer.app-footer a{color:var(--teal-light);}
     <div class="ledger-tab active" data-tab="consumo">
       <div class="tnum">PAINEL 01</div>
       <div class="ttitle">Material de Consumo</div>
-      <div class="tsub">Empenhado × Liquidado × % a liquidar</div>
+      <div class="tsub">Visão por classificação e árvore de processos</div>
     </div>
     <div class="ledger-tab" data-tab="dias">
       <div class="tnum">PAINEL 02</div>
@@ -358,23 +308,21 @@ footer.app-footer a{color:var(--teal-light);}
   <div class="sheet">
 
     <div class="tabpanel active" id="tab-consumo">
-
       <div class="filterbar">
         <div class="filter-group">
-          <span class="filter-label">Elemento de despesa (coluna G)</span>
+          <span class="filter-label">Elemento de despesa (coluna E)</span>
           <div class="chip-row" id="chipsElemento1"></div>
           <div class="chip-actions">
             <button data-act="all" data-target="1">selecionar todos</button>
             <button data-act="none" data-target="1">limpar</button>
-            <button data-act="default" data-target="1">padrão (30)</button>
           </div>
         </div>
         <div class="filter-group">
-          <span class="filter-label">PI (coluna E)</span>
+          <span class="filter-label">PI (coluna D)</span>
           <select class="pi-select" id="piSelect1"></select>
         </div>
         <div class="filter-group">
-          <span class="filter-label">Classificação (coluna S)</span>
+          <span class="filter-label">Classificação (coluna K)</span>
           <div class="chip-row" id="chipsClassificacao1"></div>
           <div class="chip-actions">
             <button data-act="all" data-target="class">selecionar todos</button>
@@ -387,23 +335,26 @@ footer.app-footer a{color:var(--teal-light);}
 
       <div class="grid-2">
         <div>
-          <h3 class="section-title"><span class="n">01</span> Por classificação</h3>
-          <table class="ledger" id="tableConsumo">
-            <thead><tr><th>Classificação</th><th>Empenhadas</th><th>Liquidadas</th><th>A liquidar</th><th>%</th></tr></thead>
-            <tbody></tbody>
-            <tfoot></tfoot>
-          </table>
-          <p class="note">Fórmula: <code>% a liquidar = (Empenhadas − Liquidadas) / Empenhadas</code>. Valores calculados dinamicamente a partir dos nomes canônicos da coluna S.</p>
+          <div class="tree-toolbar">
+            <h3 class="section-title" style="margin:0;"><span class="n">01</span> Classificação → Favorecido → Processo</h3>
+            <div class="chip-actions">
+              <button id="expandAll1">expandir tudo</button>
+              <button id="collapseAll1">recolher tudo</button>
+            </div>
+          </div>
+          
+          <div class="tree" id="treeConsumo"></div>
+          
+          <p class="note">Fórmula de cálculo: <code>% a liquidar = A Liquidar / Empenhadas</code>. Os dados de <strong>Serviços Fiotec</strong> foram isolados via regra lógica baseada na identificação na coluna A.</p>
         </div>
         <div>
-          <h3 class="section-title"><span class="n">02</span> % a liquidar por categoria</h3>
+          <h3 class="section-title"><span class="n">02</span> % Saldo a Liquidar por Grupo</h3>
           <div class="chart-box"><canvas id="chartConsumo"></canvas></div>
         </div>
       </div>
     </div>
 
     <div class="tabpanel" id="tab-dias">
-
       <div class="subtabs">
         <button class="subtab-btn active" data-sub="pontuais">Contratos pontuais</button>
         <button class="subtab-btn" data-sub="consumo2">Material de consumo</button>
@@ -412,7 +363,7 @@ footer.app-footer a{color:var(--teal-light);}
       <div class="subpanel" id="sub-pontuais">
         <div class="filterbar">
           <div class="filter-group">
-            <span class="filter-label">Elemento de despesa (coluna G)</span>
+            <span class="filter-label">Elemento de despesa (coluna L)</span>
             <div class="chip-row" id="chipsElementoP"></div>
             <div class="chip-actions">
               <button data-act="all" data-target="P">selecionar todos</button>
@@ -421,27 +372,26 @@ footer.app-footer a{color:var(--teal-light);}
             </div>
           </div>
           <div class="filter-group">
-            <span class="filter-label">Categoria de tipo (coluna W)</span>
+            <span class="filter-label">Classificação Tipo (coluna Y)</span>
             <div class="seg" id="segTipoP">
               <button data-val="demanda" class="active">Demanda</button>
               <button data-val="continuo">Contínuo</button>
               <button data-val="todos">Todos</button>
             </div>
-            <!-- Novo Seletor de PI no painel 2 abaixo do Tipo -->
-            <span class="filter-label" style="margin-top: 8px;">PI (coluna E)</span>
+            <span class="filter-label" style="margin-top: 8px;">PI (coluna Q)</span>
             <select class="pi-select" id="piSelectP"></select>
           </div>
           <div class="filter-group">
-            <span class="filter-label">Buscar favorecido / processo</span>
+            <span class="filter-label">Buscar favorecido / processo (Colunas P / R)</span>
             <input class="search-input" placeholder="ex.: FIOTEC, 25381.000..." id="searchP">
           </div>
         </div>
 
         <div class="kpi-row" id="kpiRowP"></div>
-        <h3 class="section-title"><span class="n">01</span> Saldo por faixa de dias</h3>
+        <h3 class="section-title"><span class="n">01</span> Saldo por faixa de dias (coluna X)</h3>
         <div class="aging-list" id="agingP"></div>
         <div class="tree-toolbar">
-          <h3 class="section-title" style="margin:0;"><span class="n">02</span> Favorecido → processo → saldo</h3>
+          <h3 class="section-title" style="margin:0;"><span class="n">02</span> Categoria Dias → Favorecido → Processo</h3>
           <div class="chip-actions"><button id="expandAllP">expandir tudo</button><button id="collapseAllP">recolher tudo</button></div>
         </div>
         <div class="tree" id="treeP"></div>
@@ -450,83 +400,73 @@ footer.app-footer a{color:var(--teal-light);}
       <div class="subpanel" id="sub-consumo2" style="display:none;">
         <div class="filterbar">
           <div class="filter-group">
-            <span class="filter-label">Elemento de despesa (coluna G)</span>
+            <span class="filter-label">Elemento de despesa (coluna L)</span>
             <div class="chip-row" id="chipsElementoC"></div>
             <div class="chip-actions">
               <button data-act="all" data-target="C">selecionar todos</button>
               <button data-act="none" data-target="C">limpar</button>
-              <button data-act="default" data-target="C">padrão (30)</button>
+              <button data-act="default" data-target="C">Apenas 30</button>
             </div>
           </div>
           <div class="filter-group">
-            <span class="filter-label">Categoria de tipo (coluna W)</span>
+            <span class="filter-label">Classificação Tipo (coluna Y)</span>
             <div class="seg" id="segTipoC">
               <button data-val="demanda">Demanda</button>
               <button data-val="continuo">Contínuo</button>
               <button data-val="todos" class="active">Todos</button>
             </div>
-            <!-- Novo Seletor de PI no painel 2 abaixo do Tipo -->
-            <span class="filter-label" style="margin-top: 8px;">PI (coluna E)</span>
+            <span class="filter-label" style="margin-top: 8px;">PI (coluna Q)</span>
             <select class="pi-select" id="piSelectC"></select>
           </div>
           <div class="filter-group">
-            <span class="filter-label">Buscar favorecido / processo</span>
+            <span class="filter-label">Buscar favorecido / processo (Colunas P / R)</span>
             <input class="search-input" placeholder="ex.: WHITE MARTINS, 25381.000..." id="searchC">
           </div>
         </div>
 
         <div class="kpi-row" id="kpiRowC"></div>
-        <h3 class="section-title"><span class="n">01</span> Saldo por faixa de dias</h3>
+        <h3 class="section-title"><span class="n">01</span> Saldo por faixa de dias (coluna X)</h3>
         <div class="aging-list" id="agingC"></div>
         <div class="tree-toolbar">
-          <h3 class="section-title" style="margin:0;"><span class="n">02</span> Favorecido → processo → saldo</h3>
+          <h3 class="section-title" style="margin:0;"><span class="n">02</span> Categoria Dias → Favorecido → Processo</h3>
           <div class="chip-actions"><button id="expandAllC">expandir tudo</button><button id="collapseAllC">recolher tudo</button></div>
         </div>
         <div class="tree" id="treeC"></div>
       </div>
-
     </div>
-
   </div>
 
   <details class="diag-panel">
-    <summary>🔧 Diagnóstico de colunas (abrir se algum valor parecer errado)</summary>
+    <summary>🔧 Verificação de integridade de colunas e mapeamentos manuais</summary>
     <div id="diagBody" class="diag-body">Carregando…</div>
   </details>
 
   <footer class="app-footer">
-    Fonte: base publicada no Google Sheets (CSV). Os valores são recalculados no navegador a cada atualização — nenhum dado é armazenado em servidor.<br>
-    Regra de saldo: <span class="mono">A Liquidar nativo da coluna P</span>, somado por grupo.
+    Fonte: Base unificada estruturada e publicada no Google Sheets (CSV).<br>
+    Valores computados dinamicamente com renderização em tempo real.
   </footer>
-
 </div>
 
 <script>
-/* =========================================================================
-   CONFIG
-   ========================================================================= */
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcgeHYoqpMtyGnzFVn3ci1vvAP4_PzKB_4RKpjTQ1ttC-QFJsipUfxGirurFfWCmPE9wWNwtAPxJQd/pub?gid=1727878372&single=true&output=csv";
 
 const AGING_ORDER = ["1 - 30 dias","31 - 60 dias","61 - 90 dias","91 - 120 dias","121 - 220 dias","acima de 221 dias"];
 const AGING_COLORS = { "1 - 30 dias":"#3E7C59", "31 - 60 dias":"#7FA65C", "61 - 90 dias":"#C98A2B", "91 - 120 dias":"#C2762B", "121 - 220 dias":"#B5453B", "acima de 221 dias":"#7A2E27" };
+const BASE_COLORS = ["#0E3B36", "#175951", "#C08A2E", "#3E7C59", "#727272", "#B5453B", "#8C439E"];
 
-const BASE_COLORS = ["#0E3B36", "#175951", "#C08A2E", "#3E7C59", "#6E7A76", "#B5453B", "#A43B84", "#2B6CB0"];
-function getChartColor(index) {
-  return BASE_COLORS[index % BASE_COLORS.length];
-}
+const CLASSIFICACOES_ALVO = ["Condominiais", "Diárias e passagens", "Material de Consumo", "Pessoas", "Serviços", "Serviços Fiotec"];
+
+function getChartColor(index) { return BASE_COLORS[index % BASE_COLORS.length]; }
 
 let RAW = [];       
-let ELEMENTOS = []; 
-let PIS = [];
-let CLASSIFICACOES = []; 
+let ELEMENTOS_P1 = []; 
+let ELEMENTOS_P2 = [];
+let PIS_P1 = [];
+let PIS_P2 = [];
 let charts = {};
 
-/* =========================================================================
-   UTILITIES
-   ========================================================================= */
-function normHeader(s){
-  return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
-}
+function normHeader(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(); }
+
 function parseNum(v){
   if(v===null||v===undefined) return 0;
   let s = String(v).trim();
@@ -536,313 +476,158 @@ function parseNum(v){
   if(s.includes(",") && s.includes(".")){
     if(s.lastIndexOf(",") > s.lastIndexOf(".")){ s = s.replace(/\./g,"").replace(",","."); }
     else { s = s.replace(/,/g,""); }
-  } else if(s.includes(",")){
-    s = s.replace(",",".");
-  }
+  } else if(s.includes(",")){ s = s.replace(",","."); }
   const n = parseFloat(s);
   return isNaN(n) ? 0 : n;
 }
-function fmtBRL(n){
-  return "R$ " + n.toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2});
-}
-function fmtNum(n){
-  return n.toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2});
-}
-function fmtPct(n){
-  return (n*100).toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2}) + "%";
-}
-function stampClass(pct){
-  if(pct >= 0.5) return "high";
-  if(pct >= 0.20) return "mid";
-  return "low";
-}
-function agingSortKey(label){
-  const idx = AGING_ORDER.indexOf(label);
-  if(idx>-1) return idx;
-  const m = String(label).match(/\d+/);
-  return m ? 100+parseInt(m[0]) : 999;
-}
-function normTipo(raw){
-  const n = normHeader(raw);
-  if(n.includes("demand")) return "demanda";
-  if(n.includes("continuo")) return "continuo";
-  return "outro";
-}
 
-/* =========================================================================
-   COLUMN RESOLUTION
-   ========================================================================= */
-const POSITIONS = {
-  favorecido:0, processo:3, pi:4, elemento:6,
-  aLiquidarCol:15, empenhadas:16, liquidadas:17,
-  classificacao:18, categoriaDias:21, categoriaTipo:22
-};
-let DIAG = { headers:[], fields:{} };
+function fmtBRL(n){ return "R$ " + n.toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmtNum(n){ return n.toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmtPct(n){ return (n*100).toLocaleString("pt-BR",{minimumFractionDigits:2, maximumFractionDigits:2}) + "%"; }
+function stampClass(pct){ if(pct >= 0.5) return "high"; if(pct >= 0.20) return "mid"; return "low"; }
+function agingSortKey(label){ const idx = AGING_ORDER.indexOf(label); return idx>-1 ? idx : 999; }
 
-function stem(h){
-  return normHeader(h).replace(/[^a-z0-9]+/g," ").trim();
-}
-function resolveColumns(headers){
-  const norm = headers.map(stem);
-  DIAG = { headers: headers.slice(), fields:{} };
-
-  const byName = (tests, excludeTests=[]) => {
-    for(let i=0;i<norm.length;i++){
-      const h = norm[i];
-      if(tests.every(t => h.includes(t)) && !excludeTests.some(t => h.includes(t))) return headers[i];
-    }
-    return null;
-  };
-  const exact = (val) => {
-    for(let i=0;i<norm.length;i++){ if(norm[i]===val) return headers[i]; }
-    return null;
-  };
-
-  const resolve = (key, nameFn) => {
-    let header = nameFn();
-    let method = "nome";
-    if(!header){
-      const pos = POSITIONS[key];
-      if(pos!==undefined && headers[pos]!==undefined){
-        header = headers[pos];
-        method = "posição (" + String.fromCharCode(65+pos) + ")";
-      } else {
-        method = "não encontrado";
-      }
-    }
-    DIAG.fields[key] = { header, method };
-    return header;
-  };
-
-  return {
-    favorecido:    resolve("favorecido", () => byName(["favorecido"])),
-    processo:      resolve("processo",   () => byName(["processo"])),
-    pi:            resolve("pi",         () => exact("pi")),
-    elemento:      resolve("elemento",   () => byName(["elemento","despesa"])),
-    classificacao: resolve("classificacao", () => byName(["classificac"], ["categoria"])),
-    empenhadas:    resolve("empenhadas", () => byName(["despes","empenhad"], ["liquidar"])),
-    liquidadas:    resolve("liquidadas", () => byName(["despes","liquidad"], ["empenhad"])),
-    aLiquidarCol:  resolve("aLiquidarCol", () => byName(["empenhad","liquidar"])),
-    categoriaDias: resolve("categoriaDias", () => byName(["categoria","dias"])),
-    categoriaTipo: resolve("categoriaTipo", () => byName(["categoria","tipo"])),
-  };
-}
-
-/* =========================================================================
-   DATA LOAD
-   ========================================================================= */
 function loadData(){
-  setStatus("connecting");
   document.getElementById("loadingOverlay").classList.remove("hidden");
   Papa.parse(CSV_URL, {
     download:true,
-    header:true,
+    header:false, // Usar leitura de índices fixos para evitar quebras por cabeçalhos estendidos
     skipEmptyLines:true,
     complete:(res)=>{
       try{
-        buildRaw(res.data, res.meta.fields);
-        setStatus("ok");
+        processMatrix(res.data);
+        document.getElementById("statusPill").classList.remove("err");
+        document.getElementById("statusText").textContent = "sincronizado às " + new Date().toLocaleTimeString("pt-BR");
       }catch(e){
         console.error(e);
-        setStatus("error");
+        document.getElementById("statusPill").classList.add("err");
+        document.getElementById("statusText").textContent = "Erro na leitura lógica";
       }
       document.getElementById("loadingOverlay").classList.add("hidden");
     },
     error:(err)=>{
       console.error(err);
-      setStatus("error");
+      document.getElementById("statusPill").classList.add("err");
+      document.getElementById("statusText").textContent = "falha de conexão";
       document.getElementById("loadingOverlay").classList.add("hidden");
     }
   });
 }
-function setStatus(state){
-  const pill = document.getElementById("statusPill");
-  const text = document.getElementById("statusText");
-  pill.classList.remove("err");
-  if(state==="connecting"){ text.textContent = "conectando…"; }
-  else if(state==="ok"){
-    text.textContent = "sincronizado às " + new Date().toLocaleTimeString("pt-BR");
-  } else {
-    pill.classList.add("err");
-    text.textContent = "falha ao carregar a planilha";
-  }
-}
 
-function buildRaw(rows, headers){
-  const cols = resolveColumns(headers);
-  if(!cols.elemento || !cols.classificacao){
-    throw new Error("Colunas essenciais não encontradas no CSV.");
-  }
+function processMatrix(matrix){
+  if(matrix.length < 2) return;
+  const dataRows = matrix.slice(1); // Ignora linha do cabeçalho original
 
-  const rawClassificacoes = rows.map(r => String(r[cols.classificacao] || "").trim()).filter(Boolean);
-  const uniqueMap = {};
-  rawClassificacoes.forEach(val => {
-    const key = normHeader(val);
-    if (!uniqueMap[key]) uniqueMap[key] = val; 
-  });
+  RAW = dataRows.map((row, idx) => {
+    // Mapeamento Direto Painel 1 (Base Retificada)
+    const favP1 = String(row[0] || "").trim(); // Coluna A
+    const piP1 = String(row[3] || "").trim(); // Coluna D
+    const elemP1 = String(row[4] || "").trim(); // Coluna E
+    const empP1 = parseNum(row[7]); // Coluna H
+    const liqP1 = parseNum(row[8]); // Coluna I
+    const aliqP1 = parseNum(row[9]); // Coluna J
+    let classP1 = String(row[10] || "").trim(); // Coluna K
 
-  RAW = rows.map(r => {
-    const elemento = String(r[cols.elemento]||"").trim();
-    const empenhadas = parseNum(r[cols.empenhadas]);
-    const liquidadas = parseNum(r[cols.liquidadas]);
-    const aLiquidar = parseNum(r[cols.aLiquidarCol]); 
-    const favorecido = String(r[cols.favorecido]||"").trim() || "NÃO INFORMADO";
-    const rawClass = String(r[cols.classificacao] || "").trim();
-    const categoriaNormalizada = uniqueMap[normHeader(rawClass)] || null;
+    // Regra do Filtro Especial da FIOTEC
+    if(favP1.toUpperCase().includes("FIOTEC - FUNDACAO PARA O DESENVOLVIMENTO")){
+      classP1 = "Serviços Fiotec";
+    }
+
+    // Mapeamento Direto Painel 2
+    const elemP2 = String(row[11] || "").trim(); // Coluna L
+    const favP2 = String(row[15] || "").trim(); // Coluna P
+    const piP2 = String(row[16] || "").trim(); // Coluna Q
+    const procP2 = String(row[17] || "").trim(); // Coluna R
+    const saldoP2 = parseNum(row[20]); // Coluna U
+    const agingP2 = String(row[23] || "").trim(); // Coluna X
+    
+    // Normalização simplificada de Classificação Tipo (Coluna Y)
+    const rawTipo = normHeader(row[24]);
+    let tipoP2 = "outro";
+    if(rawTipo.includes("demand")) tipoP2 = "demanda";
+    if(rawTipo.includes("continuo")) tipoP2 = "continuo";
 
     return {
-      favorecido,
-      processo: String(r[cols.processo]||"").trim() || "—",
-      pi: String(r[cols.pi]||"").trim() || "—",
-      elemento,
-      categoria: categoriaNormalizada, 
-      empenhadas, liquidadas,
-      aLiquidar,
-      categoriaDias: String(r[cols.categoriaDias]||"").trim() || null,
-      tipo: normTipo(r[cols.categoriaTipo]),
+      favP1, piP1, elemP1, empP1, liqP1, aliqP1, classP1,
+      elemP2, favP2, piP2, procP2, saldoP2, agingP2, tipoP2
     };
-  }).filter(r => r.elemento !== "");
+  }).filter(r => r.elemP1 !== "" || r.elemP2 !== "");
 
-  ELEMENTOS = [...new Set(RAW.map(r=>r.elemento))].sort((a,b)=> (parseInt(a)||0)-(parseInt(b)||0));
-  PIS = [...new Set(RAW.map(r=>r.pi))].sort();
-  CLASSIFICACOES = [...new Set(RAW.map(r=>r.categoria).filter(Boolean))].sort();
+  // Coleções exclusivas para os filtros
+  ELEMENTOS_P1 = [...new Set(RAW.map(r=>r.elemP1).filter(Boolean))].sort();
+  ELEMENTOS_P2 = [...new Set(RAW.map(r=>r.elemP2).filter(Boolean))].sort();
+  PIS_P1 = [...new Set(RAW.map(r=>r.piP1).filter(Boolean))].sort();
+  PIS_P2 = [...new Set(RAW.map(r=>r.piP2).filter(Boolean))].sort();
 
   document.getElementById("rowCount").textContent = RAW.length.toLocaleString("pt-BR");
 
-  buildElementoChips("chipsElemento1","1", ["30"]);
-  buildElementoChips("chipsElementoP","P", ELEMENTOS.filter(e=>e!=="30"));
-  buildElementoChips("chipsElementoC","C", ["30"]);
-  buildPiSelect();
-  buildClassificacaoChips(); 
+  // Construir Interfaces de Opções
+  buildChipsGeneric("chipsElemento1", ELEMENTOS_P1, "1", true);
+  buildChipsGeneric("chipsElementoP", ELEMENTOS_P2, "P", false, "30"); // Desmarcar 30 por padrão nos pontuais
+  buildChipsGeneric("chipsElementoC", ELEMENTOS_P2, "C", false, "30", true); // Apenas 30 por padrão em consumo
 
+  buildClassificacaoP1Chips();
+  buildPiDropdowns();
+
+  // Executar renderizações iniciais
   renderPanel1();
   renderPanel2("P");
   renderPanel2("C");
-  renderDiagnostics();
+  renderDiagnostics(matrix[0]);
 }
 
-/* =========================================================================
-   DIAGNOSTICS PANEL
-   ========================================================================= */
-const FIELD_LABELS = {
-  favorecido:"Favorecido", processo:"Núm. Processo", pi:"PI", elemento:"Elemento Despesa",
-  classificacao:"Classificação", empenhadas:"Despesas Empenhadas", liquidadas:"Despesas Liquidadas",
-  aLiquidarCol:"Despesas Empenhadas a Liquidar (bruta)", categoriaDias:"Categoria de Dias", categoriaTipo:"Categoria de Tipo"
-};
-function renderDiagnostics(){
-  const box = document.getElementById("diagBody");
-  const sumEmp = RAW.reduce((s,r)=>s+r.empenhadas,0);
-  const sumLiq = RAW.reduce((s,r)=>s+r.liquidadas,0);
-  let rowsHtml = Object.keys(FIELD_LABELS).map(key=>{
-    const f = DIAG.fields[key] || {header:null, method:"não encontrado"};
-    const warn = !f.header || f.method.includes("posição");
-    return `<tr class="${warn?'diag-warn':''}">
-      <td>${FIELD_LABELS[key]}</td>
-      <td class="mono">${f.header ? f.header : '<em>não encontrado</em>'}</td>
-      <td class="mono">${f.method}</td>
-    </tr>`;
-  }).join("");
-  box.innerHTML = `
-    <p>Total de colunas detectadas no CSV: <strong>${DIAG.headers.length}</strong> · Total de linhas: <strong>${RAW.length.toLocaleString('pt-BR')}</strong></p>
-    <table class="ledger" style="font-size:12px;"><thead><tr><th style="text-align:left;">Campo</th><th style="text-align:left;">Coluna do CSV usada</th><th style="text-align:left;">Como foi encontrada</th></tr></thead>
-    <tbody>${rowsHtml}</tbody></table>
-    <p style="margin-top:12px;">Checagem rápida — soma bruta (sem filtros) de <strong>Despesas Empenhadas</strong>: <span class="mono">${fmtBRL(sumEmp)}</span> · <strong>Despesas Liquidadas</strong>: <span class="mono">${fmtBRL(sumLiq)}</span>. ${sumEmp===0?'<strong style="color:var(--red)">⚠ Empenhadas somou zero — a coluna provavelmente não foi encontrada corretamente; confira o nome exato dela na sua planilha.</strong>':''}</p>
-    <details style="margin-top:10px;"><summary style="cursor:pointer; font-size:12px; color:var(--ink-soft);">ver todos os cabeçalhos brutos do CSV</summary>
-      <div class="mono" style="font-size:11px; margin-top:8px; line-height:1.7; word-break:break-word;">${DIAG.headers.map((h,i)=>`<div>${String.fromCharCode(65+i)}: ${h}</div>`).join("")}</div>
-    </details>
-  `;
-}
-
-/* =========================================================================
-   FILTER WIDGETS
-   ========================================================================= */
-const defaults = { "1": ["30"], "P": [], "C": ["30"], "class": [] };
-
-function buildElementoChips(containerId, target, checkedList){
+function buildChipsGeneric(containerId, list, target, checkAll=false, matchValue="", keepOnlyMatch=false){
   const el = document.getElementById(containerId);
   el.innerHTML = "";
-  ELEMENTOS.forEach(code=>{
-    const id = containerId+"_"+code;
-    const checked = checkedList.includes(code);
+  list.forEach(val => {
+    const id = containerId + "_" + val;
+    let checked = checkAll;
+    if(matchValue !== ""){
+      if(keepOnlyMatch) checked = (val === matchValue);
+      else checked = (val !== matchValue);
+    }
     const label = document.createElement("label");
-    label.className = "chip" + (checked ? " checked":"");
-    label.innerHTML = `<input type="checkbox" id="${id}" value="${code}" ${checked?"checked":""}> ${code}`;
+    label.className = "chip" + (checked ? " checked" : "");
+    label.innerHTML = `<input type="checkbox" id="${id}" value="${val}" ${checked?"checked":""}> ${val}`;
     label.querySelector("input").addEventListener("change", (e)=>{
       label.classList.toggle("checked", e.target.checked);
       onFilterChange(target);
     });
     el.appendChild(label);
   });
-  if(target !== "class") defaults[target] = checkedList;
 }
 
-function buildClassificacaoChips(){
+function buildClassificacaoP1Chips(){
   const el = document.getElementById("chipsClassificacao1");
   el.innerHTML = "";
-  CLASSIFICACOES.forEach(classe=>{
-    const id = "chipClass_1_" + classe.replace(/[^a-zA-Z0-9]/g, "_");
+  CLASSIFICACOES_ALVO.forEach(classe => {
     const label = document.createElement("label");
-    label.className = "chip checked"; 
-    label.innerHTML = `<input type="checkbox" id="${id}" value="${classe}" checked> ${classe}`;
+    label.className = "chip checked";
+    label.innerHTML = `<input type="checkbox" value="${classe}" checked> ${classe}`;
     label.querySelector("input").addEventListener("change", (e)=>{
       label.classList.toggle("checked", e.target.checked);
-      onFilterChange("1");
+      renderPanel1();
     });
     el.appendChild(label);
   });
 }
 
-function getCheckedElementos(containerId){
-  return [...document.querySelectorAll("#"+containerId+" input:checked")].map(i=>i.value);
-}
-
-document.querySelectorAll(".chip-actions button").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const act = btn.dataset.act, target = btn.dataset.target;
-    if (target === "class") {
-      const container = document.getElementById("chipsClassificacao1");
-      const boxes = container.querySelectorAll("input");
-      boxes.forEach(b=>{
-        b.checked = (act === "all");
-        b.closest(".chip").classList.toggle("checked", act === "all");
-      });
-      onFilterChange("1");
-      return;
-    }
-    
-    const map = {"1":"chipsElemento1","P":"chipsElementoP","C":"chipsElementoC"};
-    const container = document.getElementById(map[target]);
-    const boxes = container.querySelectorAll("input");
-    if(act==="all") boxes.forEach(b=>{b.checked=true; b.closest(".chip").classList.add("checked");});
-    if(act==="none") boxes.forEach(b=>{b.checked=false; b.closest(".chip").classList.remove("checked");});
-    if(act==="default"){
-      const def = target==="P" ? ELEMENTOS.filter(e=>e!=="30") : ["30"];
-      boxes.forEach(b=>{ const on = def.includes(b.value); b.checked=on; b.closest(".chip").classList.toggle("checked",on); });
-    }
-    onFilterChange(target);
-  });
-});
-
-function buildPiSelect(){
-  const optionsHtml = `<option value="__todos__">Todos os PI</option>` + PIS.map(p=>`<option value="${p}">${p}</option>`).join("");
-  const defaultPi = PIS.includes("A1IRR") ? "A1IRR" : "__todos__";
-
-  // Vincula seletor do Painel 01
+function buildPiDropdowns(){
+  const optP1 = `<option value="__todos__">Todos os PI (P1)</option>` + PIS_P1.map(p=>`<option value="${p}">${p}</option>`).join("");
   const sel1 = document.getElementById("piSelect1");
-  sel1.innerHTML = optionsHtml;
-  sel1.value = defaultPi;
+  sel1.innerHTML = optP1;
+  sel1.value = PIS_P1.includes("A1IRR") ? "A1IRR" : "__todos__";
   sel1.addEventListener("change", renderPanel1);
 
-  // Vincula seletor de Contratos Pontuais (Painel 02)
+  const optP2 = `<option value="__todos__">Todos os PI (P2)</option>` + PIS_P2.map(p=>`<option value="${p}">${p}</option>`).join("");
   const selP = document.getElementById("piSelectP");
-  selP.innerHTML = optionsHtml;
-  selP.value = defaultPi;
+  selP.innerHTML = optP2;
+  selP.value = PIS_P2.includes("A1IRR") ? "A1IRR" : "__todos__";
   selP.addEventListener("change", () => renderPanel2("P"));
 
-  // Vincula seletor de Material de Consumo (Painel 02)
   const selC = document.getElementById("piSelectC");
-  selC.innerHTML = optionsHtml;
-  selC.value = defaultPi;
+  selC.innerHTML = optP2;
+  selC.value = PIS_P2.includes("A1IRR") ? "A1IRR" : "__todos__";
   selC.addEventListener("change", () => renderPanel2("C"));
 }
 
@@ -852,238 +637,316 @@ function onFilterChange(target){
   if(target==="C") renderPanel2("C");
 }
 
-function setupSeg(segId, cb){
-  const seg = document.getElementById(segId);
-  seg.querySelectorAll("button").forEach(b=>{
-    b.addEventListener("click", ()=>{
-      seg.querySelectorAll("button").forEach(x=>x.classList.remove("active"));
-      b.classList.add("active");
-      cb();
+// Configurar as ações extras dos botões Selecionar Todos / Limpar
+document.querySelectorAll(".chip-actions button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const act = btn.dataset.act, target = btn.dataset.target;
+    if (target === "class") {
+      document.querySelectorAll("#chipsClassificacao1 input").forEach(b => {
+        b.checked = (act === "all");
+        b.closest(".chip").classList.toggle("checked", act === "all");
+      });
+      renderPanel1();
+      return;
+    }
+    const map = {"1":"chipsElemento1","P":"chipsElementoP","C":"chipsElementoC"};
+    document.querySelectorAll("#" + map[target] + " input").forEach(b => {
+      if(act==="all") { b.checked = true; b.closest(".chip").classList.add("checked"); }
+      if(act==="none") { b.checked = false; b.closest(".chip").classList.remove("checked"); }
+      if(act==="default"){
+        if(target==="P"){ b.checked = (b.value !== "30"); b.closest(".chip").classList.toggle("checked", b.value !== "30"); }
+        else { b.checked = (b.value === "30"); b.closest(".chip").classList.toggle("checked", b.value === "30"); }
+      }
     });
+    onFilterChange(target);
   });
-}
-setupSeg("segTipoP", ()=>renderPanel2("P"));
-setupSeg("segTipoC", ()=>renderPanel2("C"));
-function getSegVal(segId){
-  return document.querySelector("#"+segId+" button.active").dataset.val;
-}
-document.getElementById("searchP").addEventListener("input", ()=>renderPanel2("P"));
-document.getElementById("searchC").addEventListener("input", ()=>renderPanel2("C"));
+});
 
 /* =========================================================================
-   PANEL 1 — MATERIAL DE CONSUMO
+   RENDERIZAÇÃO PAINEL 01
    ========================================================================= */
 function renderPanel1(){
-  const elementos = getCheckedElementos("chipsElemento1");
-  const pi = document.getElementById("piSelect1").value;
-  const classesSelecionadas = getCheckedElementos("chipsClassificacao1"); 
+  const checkedElems = [...document.querySelectorAll("#chipsElemento1 input:checked")].map(i=>i.value);
+  const piSelected = document.getElementById("piSelect1").value;
+  const checkedClasses = [...document.querySelectorAll("#chipsClassificacao1 input:checked")].map(i=>i.value);
 
-  let rows = RAW.filter(r => elementos.includes(r.elemento) && r.categoria);
-  if(pi !== "__todos__") rows = rows.filter(r=>r.pi === pi);
-  if(classesSelecionadas.length > 0) rows = rows.filter(r=>classesSelecionadas.includes(r.categoria));
+  // Filtragem dos dados sob as novas regras do P1
+  let filtered = RAW.filter(r => checkedElems.includes(r.elemP1) && r.classP1);
+  if(piSelected !== "__todos__") filtered = filtered.filter(r => r.piP1 === piSelected);
+  filtered = filtered.filter(r => checkedClasses.includes(r.classP1));
 
+  // Acumulação de Totais por Grupo
   const agg = {};
-  CLASSIFICACOES.forEach(c => agg[c] = {emp:0, liq:0, aliq:0});
-
-  rows.forEach(r=>{
-    if(!agg[r.categoria]) return;
-    agg[r.categoria].emp += r.empenhadas;
-    agg[r.categoria].liq += r.liquidadas;
-    agg[r.categoria].aliq += r.aLiquidar;
+  CLASSIFICACOES_ALVO.forEach(c => agg[c] = { emp:0, liq:0, aliq:0, records:[] });
+  
+  filtered.forEach(r => {
+    if(agg[r.classP1]) {
+      agg[r.classP1].emp += r.empP1;
+      agg[r.classP1].liq += r.liqP1;
+      agg[r.classP1].aliq += r.aliqP1;
+      agg[r.classP1].records.push(r);
+    }
   });
 
-  const tbody = document.querySelector("#tableConsumo tbody");
-  const tfoot = document.querySelector("#tableConsumo tfoot");
-  tbody.innerHTML = "";
-  
-  let totEmp=0, totLiq=0, totAliq=0;
-  const chartLabels=[], chartData=[], chartColors=[];
-  
+  let totalEmp=0, totalLiq=0, totalAliq=0;
+  const treeEl = document.getElementById("treeConsumo");
+  treeEl.innerHTML = "";
+
+  const chartLabels = [], chartData = [], chartColors = [];
   let colorIdx = 0;
-  CLASSIFICACOES.forEach(cat=>{
-    if(!classesSelecionadas.includes(cat)) return;
 
-    const emp = agg[cat].emp;
-    const liq = agg[cat].liq;
-    const aliq = agg[cat].aliq;
-    
-    if(emp === 0 && liq === 0 && aliq === 0) return;
+  CLASSIFICACOES_ALVO.forEach(cat => {
+    if(!checkedClasses.includes(cat)) return;
+    const dataGrupo = agg[cat];
+    if(dataGrupo.emp === 0 && dataGrupo.liq === 0 && dataGrupo.aliq === 0) return;
 
-    const pct = emp!==0 ? aliq/emp : 0;
-    totEmp += emp; totLiq += liq; totAliq += aliq;
+    totalEmp += dataGrupo.emp;
+    totalLiq += dataGrupo.liq;
+    totalAliq += dataGrupo.aliq;
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${cat}</td><td>${fmtNum(emp)}</td><td>${fmtNum(liq)}</td><td>${fmtNum(aliq)}</td>
-      <td><span class="stamp ${stampClass(pct)}">${fmtPct(pct)}</span></td>`;
-    tbody.appendChild(tr);
+    const pctGrupo = dataGrupo.emp !== 0 ? (dataGrupo.aliq / dataGrupo.emp) : 0;
 
-    chartLabels.push(cat); 
-    chartData.push(+(pct*100).toFixed(2)); 
+    // Agrupamento interno para a Tabela Dinâmica Expandível (Favorecido -> Processo)
+    const favSubMap = {};
+    dataGrupo.records.forEach(r => {
+      const fName = r.favP1 || "NÃO INFORMADO";
+      if(!favSubMap[fName]) favSubMap[fName] = { empenhado:0, aLiquidar:0, procs:{} };
+      favSubMap[fName].empenhado += r.empP1;
+      favSubMap[fName].aLiquidar += r.aliqP1;
+      
+      const pKey = r.favP1.toUpperCase().includes("FIOTEC") ? ("Proc: " + (r.piP1 || "—")) : ("Item/Proc: " + (r.elemP1 || "—"));
+      favSubMap[fName].procs[pKey] = (favSubMap[fName].procs[pKey] || 0) + r.aliqP1;
+    });
+
+    const favHtml = Object.entries(favSubMap).sort((a,b)=>b[1].aLiquidar - a[1].aLiquidar).map(([favName, obj])=>{
+      const procHtml = Object.entries(obj.procs).sort((a,b)=>b[1]-a[1]).map(([pName, vSaldo])=>`
+        <div class="proc-row"><span class="pname">${pName}</span><span class="pval">${fmtBRL(vSaldo)}</span></div>
+      `).join("");
+
+      return `<details class="fav">
+        <summary>
+          <span class="arrow">▸</span>
+          <span class="fname">${favName}</span>
+          <span class="fval" style="margin-right:12px;">Emp: ${fmtNum(obj.empenhado)}</span>
+          <span class="fextra">A Liq: <strong>${fmtBRL(obj.aLiquidar)}</strong></span>
+        </summary>
+        ${procHtml}
+      </details>`;
+    }).join("");
+
+    const bucketDetails = document.createElement("details");
+    bucketDetails.className = "bucket";
+    bucketDetails.innerHTML = `
+      <summary>
+        <span class="arrow">▸</span>
+        <span class="btag" style="background:${getChartColor(colorIdx)}"></span>
+        <span class="bname">${cat}</span>
+        <span class="stamp ${stampClass(pctGrupo)}" style="margin-right:15px; transform: scale(0.9);">${fmtPct(pctGrupo)}</span>
+        <span class="bcount">Saldo: ${fmtBRL(dataGrupo.aliq)}</span>
+      </summary>
+      <div style="padding: 4px 0; background: #fff;">${favHtml}</div>
+    `;
+    treeEl.appendChild(bucketDetails);
+
+    chartLabels.push(cat);
+    chartData.push(+(pctGrupo*100).toFixed(2));
     chartColors.push(getChartColor(colorIdx++));
   });
 
-  const totPct = totEmp!==0 ? totAliq/totEmp : 0;
-  tfoot.innerHTML = `<tr><td>Total geral</td><td>${fmtNum(totEmp)}</td><td>${fmtNum(totLiq)}</td><td>${fmtNum(totAliq)}</td>
-    <td><span class="stamp ${stampClass(totPct)}">${fmtPct(totPct)}</span></td></tr>`;
+  const globalPct = totalEmp !== 0 ? (totalAliq / totalEmp) : 0;
 
+  // Atualizar os Painéis superiores de KPI
   document.getElementById("kpiRow1").innerHTML = `
-    <div class="kpi"><div class="klabel">Empenhado</div><div class="kval">${fmtBRL(totEmp)}</div><div class="ksub">${rows.length.toLocaleString('pt-BR')} lançamentos</div></div>
-    <div class="kpi"><div class="klabel">Liquidado</div><div class="kval">${fmtBRL(totLiq)}</div><div class="ksub">${totEmp?fmtPct(totLiq/totEmp):"—"} do empenhado</div></div>
-    <div class="kpi accent"><div class="klabel">A liquidar</div><div class="kval">${fmtBRL(totAliq)}</div><div class="ksub">saldo em aberto</div></div>
-    <div class="kpi ${totPct>=0.5?'danger':''}"><div class="klabel">% a liquidar</div><div class="kval">${fmtPct(totPct)}</div><div class="ksub">sobre total empenhado</div></div>
+    <div class="kpi"><div class="klabel">Total Empenhado</div><div class="kval">${fmtBRL(totalEmp)}</div><div class="ksub">Painel 01</div></div>
+    <div class="kpi"><div class="klabel">Total Liquidado</div><div class="kval">${fmtBRL(totalLiq)}</div><div class="ksub">${totalEmp?fmtPct(totalLiq/totalEmp):"—"} do empenhado</div></div>
+    <div class="kpi accent"><div class="klabel">A Liquidar (Saldo Geral)</div><div class="kval">${fmtBRL(totalAliq)}</div><div class="ksub">Carteira ativa</div></div>
+    <div class="kpi ${globalPct>=0.5?'danger':''}"><div class="klabel">% Geral em Aberto</div><div class="kval" style="font-size:27px; font-weight:800;">${fmtPct(globalPct)}</div><div class="ksub">Destaque consolidado</div></div>
   `;
 
   drawBarChart("chartConsumo", chartLabels, chartData, chartColors);
 }
 
-function drawBarChart(canvasId, labels, data, colors){
-  const ctx = document.getElementById(canvasId).getContext("2d");
-  if(charts[canvasId]) charts[canvasId].destroy();
-  charts[canvasId] = new Chart(ctx, {
-    type:"bar",
-    data:{ labels, datasets:[{ data, backgroundColor:colors, borderRadius:6, maxBarThickness:34 }]},
-    options:{
-      indexAxis:"y",
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=> c.parsed.x.toFixed(2)+"%" } } },
-      scales:{
-        x:{ grid:{color:"rgba(27,38,32,.08)"}, ticks:{callback:(v)=>v+"%", font:{family:"IBM Plex Mono", size:11}} },
-        y:{ grid:{display:false}, ticks:{font:{family:"Inter", size:11.5}} }
-      }
-    }
-  });
-}
-
 /* =========================================================================
-   PANEL 2 — DIAS A LIQUIDAR
+   RENDERIZAÇÃO PAINEL 02 (DIAS A LIQUIDAR)
    ========================================================================= */
 function renderPanel2(target){
-  const isP = target==="P";
-  const elChips = isP ? "chipsElementoP" : "chipsElementoC";
-  const seg = isP ? "segTipoP" : "segTipoC";
-  const searchId = isP ? "searchP" : "searchC";
-  const kpiId = isP ? "kpiRowP" : "kpiRowC";
-  const agingId = isP ? "agingP" : "agingC";
-  const treeId = isP ? "treeP" : "treeC";
-  const piId = isP ? "piSelectP" : "piSelectC";
+  const isP = target === "P";
+  const checkedElems = [...document.querySelectorAll("#" + (isP ? "chipsElementoP" : "chipsElementoC") + " input:checked")].map(i=>i.value);
+  const tipoVal = document.querySelector("#" + (isP ? "segTipoP" : "segTipoC") + " button.active").dataset.val;
+  const piVal = document.getElementById(isP ? "piSelectP" : "piSelectC").value;
+  const searchStr = normHeader(document.getElementById(isP ? "searchP" : "searchC").value);
 
-  const elementos = getCheckedElementos(elChips);
-  const tipo = getSegVal(seg);
-  const search = normHeader(document.getElementById(searchId).value);
-  const pi = document.getElementById(piId).value;
+  // Aplicação da malha de filtros direcionada às colunas do P2
+  let filtered = RAW.filter(r => checkedElems.includes(r.elemP2) && r.agingP2);
+  if(piVal !== "__todos__") filtered = filtered.filter(r => r.piP2 === piVal);
+  if(tipoVal !== "todos") filtered = filtered.filter(r => r.tipoP2 === tipoVal);
+  if(searchStr) filtered = filtered.filter(r => normHeader(r.favP2).includes(searchStr) || normHeader(r.procP2).includes(searchStr));
 
-  let rows = RAW.filter(r => elementos.includes(r.elemento) && r.categoriaDias);
-  if(pi !== "__todos__") rows = rows.filter(r=>r.pi === pi);
-  if(tipo !== "todos") rows = rows.filter(r=>r.tipo === tipo);
-  if(search) rows = rows.filter(r => normHeader(r.favorecido).includes(search) || normHeader(r.processo).includes(search));
+  const totalSaldo = filtered.reduce((s,r) => s + r.saldoP2, 0);
+  const distinctFavs = new Set(filtered.map(r=>r.favP2));
+  const distinctProcs = new Set(filtered.map(r=>r.procP2));
+  const critico91Dias = filtered.filter(r => agingSortKey(r.agingP2) >= 3).reduce((s,r)=>s+r.saldoP2,0);
 
-  // KPIs
-  const totalSaldo = rows.reduce((s,r)=>s+r.aLiquidar,0);
-  const favs = new Set(rows.map(r=>r.favorecido));
-  const procs = new Set(rows.map(r=>r.favorecido+"|"+r.processo));
-  const overdue = rows.filter(r=> agingSortKey(r.categoriaDias) >= AGING_ORDER.indexOf("91 - 120 dias")).reduce((s,r)=>s+r.aLiquidar,0);
-  document.getElementById(kpiId).innerHTML = `
-    <div class="kpi"><div class="klabel">Saldo total a liquidar</div><div class="kval">${fmtBRL(totalSaldo)}</div><div class="ksub">${rows.length.toLocaleString('pt-BR')} lançamentos</div></div>
-    <div class="kpi"><div class="klabel">Favorecidos</div><div class="kval">${favs.size.toLocaleString('pt-BR')}</div><div class="ksub">fornecedores distintos</div></div>
-    <div class="kpi"><div class="klabel">Processos</div><div class="kval">${procs.size.toLocaleString('pt-BR')}</div><div class="ksub">NE / processos distintos</div></div>
-    <div class="kpi ${overdue/ (totalSaldo||1) >=0.3 ?'danger':'accent'}"><div class="klabel">≥ 91 dias</div><div class="kval">${fmtBRL(overdue)}</div><div class="ksub">${totalSaldo?fmtPct(overdue/totalSaldo):"—"} do saldo</div></div>
+  // KPIs P2
+  document.getElementById(isP ? "kpiRowP" : "kpiRowC").innerHTML = `
+    <div class="kpi"><div class="klabel">Saldo de Execução</div><div class="kval">${fmtBRL(totalSaldo)}</div><div class="ksub">${filtered.length} linhas localizadas</div></div>
+    <div class="kpi"><div class="klabel">Fornecedores</div><div class="kval">${distinctFavs.size}</div><div class="ksub">Distintos na seleção</div></div>
+    <div class="kpi"><div class="klabel">Processos / NE</div><div class="kval">${distinctProcs.size}</div><div class="ksub">Identificados (Col. R)</div></div>
+    <div class="kpi ${critico91Dias/(totalSaldo||1)>=0.3?'danger':'accent'}"><div class="klabel">Atraso ≥ 91 Dias</div><div class="kval">${fmtBRL(critico91Dias)}</div><div class="ksub">${totalSaldo?fmtPct(critico91Dias/totalSaldo):"—"} do saldo total</div></div>
   `;
 
-  // aging summary
+  // Agrupamento estrutural por Categoria de Dias Decorridos
   const buckets = {};
-  rows.forEach(r=>{
-    if(!buckets[r.categoriaDias]) buckets[r.categoriaDias] = {val:0,count:0};
-    buckets[r.categoriaDias].val += r.aLiquidar;
-    buckets[r.categoriaDias].count += 1;
+  filtered.forEach(r => {
+    if(!buckets[r.agingP2]) buckets[r.agingP2] = { val:0, count:0, rows:[] };
+    buckets[r.agingP2].val += r.saldoP2;
+    buckets[r.agingP2].count += 1;
+    buckets[r.agingP2].rows.push(r);
   });
-  const bucketKeys = Object.keys(buckets).sort((a,b)=>agingSortKey(a)-agingSortKey(b));
-  const maxVal = Math.max(1, ...bucketKeys.map(k=>Math.abs(buckets[k].val)));
-  const agingEl = document.getElementById(agingId);
-  if(bucketKeys.length===0){
-    agingEl.innerHTML = `<div class="empty-tree">Nenhum registro para os filtros selecionados.</div>`;
+
+  const activeKeys = Object.keys(buckets).sort((a,b) => agingSortKey(a) - agingSortKey(b));
+  const maxVal = Math.max(1, ...activeKeys.map(k => Math.abs(buckets[k].val)));
+  
+  // Renderizar Barras Laterais de Envelhecimento
+  const agingEl = document.getElementById(isP ? "agingP" : "agingC");
+  if(activeKeys.length === 0){
+    agingEl.innerHTML = `<div class="empty-tree">Sem correspondências com os critérios de filtragem ativos.</div>`;
   } else {
-    agingEl.innerHTML = bucketKeys.map(k=>{
-      const w = Math.max(2, Math.abs(buckets[k].val)/maxVal*100);
-      const color = AGING_COLORS[k] || "#7A2E27";
+    agingEl.innerHTML = activeKeys.map(k => {
+      const pctBar = Math.max(2, Math.abs(buckets[k].val) / maxVal * 100);
       return `<div class="aging-row">
         <div class="aging-name">${k}</div>
-        <div class="aging-track"><div class="aging-fill" style="width:${w}%; background:${color};"></div></div>
+        <div class="aging-track"><div class="aging-fill" style="width:${pctBar}%; background:${AGING_COLORS[k]||'#7A2E27'};"></div></div>
         <div class="aging-val">${fmtBRL(buckets[k].val)}</div>
         <div class="aging-count">${buckets[k].count}×</div>
       </div>`;
     }).join("");
   }
 
-  // drilldown tree
-  const tree = {};
-  rows.forEach(r=>{
-    tree[r.categoriaDias] = tree[r.categoriaDias] || {};
-    tree[r.categoriaDias][r.favorecido] = tree[r.categoriaDias][r.favorecido] || {};
-    const key = r.processo;
-    tree[r.categoriaDias][r.favorecido][key] = (tree[r.categoriaDias][r.favorecido][key]||0) + r.aLiquidar;
-  });
-
-  const treeEl = document.getElementById(treeId);
-  if(bucketKeys.length===0){
+  // Renderizar Árvore do Painel 02
+  const treeEl = document.getElementById(isP ? "treeP" : "treeC");
+  if(activeKeys.length === 0){
     treeEl.innerHTML = "";
   } else {
-    treeEl.innerHTML = bucketKeys.map(bucket=>{
-      const favMap = tree[bucket];
-      const favEntries = Object.entries(favMap).map(([fav,procMap])=>{
-        const favTotal = Object.values(procMap).reduce((a,b)=>a+b,0);
-        return {fav, procMap, favTotal};
-      }).sort((a,b)=>b.favTotal-a.favTotal);
-      const favHtml = favEntries.map(({fav,procMap,favTotal})=>{
-        const procHtml = Object.entries(procMap).sort((a,b)=>b[1]-a[1]).map(([proc,val])=>`
-          <div class="proc-row"><span class="pname">${proc}</span><span class="pval">${fmtBRL(val)}</span></div>
+    treeEl.innerHTML = activeKeys.map(bucket => {
+      const bData = buckets[bucket];
+      
+      const favMap = {};
+      bData.rows.forEach(r => {
+        if(!favMap[r.favP2]) favMap[r.favP2] = {};
+        favMap[r.favP2][r.procP2] = (favMap[r.favP2][r.procP2] || 0) + r.saldoP2;
+      });
+
+      const favEntries = Object.entries(favMap).map(([fName, pMap]) => {
+        const sumF = Object.values(pMap).reduce((a,b)=>a+b,0);
+        return { fName, pMap, sumF };
+      }).sort((a,b) => b.sumF - a.sumF);
+
+      const favHtml = favEntries.map(({fName, pMap, sumF}) => {
+        const procHtml = Object.entries(pMap).sort((a,b)=>b[1]-a[1]).map(([procNum, vFinal]) => `
+          <div class="proc-row"><span class="pname">Processo: ${procNum}</span><span class="pval">${fmtBRL(vFinal)}</span></div>
         `).join("");
+
         return `<details class="fav">
-          <summary><span class="arrow">▸</span><span class="fname">${fav}</span><span class="fval">${fmtBRL(favTotal)}</span></summary>
+          <summary><span class="arrow">▸</span><span class="fname">${fName}</span><span class="fval">Saldo: ${fmtBRL(sumF)}</span></summary>
           ${procHtml}
         </details>`;
       }).join("");
+
       return `<details class="bucket">
-        <summary><span class="arrow">▸</span><span class="btag" style="background:${AGING_COLORS[bucket]||'#7A2E27'}"></span>
-        <span class="bname">${bucket}</span><span class="bcount">${favEntries.length} favorecidos</span><span class="bval">${fmtBRL(buckets[bucket].val)}</span></summary>
-        ${favHtml}
+        <summary>
+          <span class="arrow">▸</span>
+          <span class="btag" style="background:${AGING_COLORS[bucket]||'#7A2E27'}"></span>
+          <span class="bname">${bucket}</span>
+          <span class="bcount">${favEntries.length} credores</span>
+          <span class="bval">${fmtBRL(bData.val)}</span>
+        </summary>
+        <div style="background:#fff;">${favHtml}</div>
       </details>`;
     }).join("");
   }
-
-  const expandBtn = document.getElementById(isP?"expandAllP":"expandAllC");
-  const collapseBtn = document.getElementById(isP?"collapseAllP":"collapseAllC");
-  expandBtn.onclick = ()=> treeEl.querySelectorAll("details").forEach(d=>d.open=true);
-  collapseBtn.onclick = ()=> treeEl.querySelectorAll("details").forEach(d=>d.open=false);
 }
 
 /* =========================================================================
-   NAV WIRING
+   CORE COMPONENT PLUGINS & CONTROLS
    ========================================================================= */
-document.querySelectorAll(".ledger-tab").forEach(tab=>{
-  tab.addEventListener("click", ()=>{
-    document.querySelectorAll(".ledger-tab").forEach(t=>t.classList.remove("active"));
-    document.querySelectorAll(".tabpanel").forEach(p=>p.classList.remove("active"));
+function drawBarChart(canvasId, labels, data, colors){
+  const ctx = document.getElementById(canvasId).getContext("2d");
+  if(charts[canvasId]) charts[canvasId].destroy();
+  charts[canvasId] = new Chart(ctx, {
+    type:"bar",
+    data:{ labels, datasets:[{ data, backgroundColor:colors, borderRadius:6, maxBarThickness:32 }]},
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=> c.parsed.x.toFixed(2)+"%" } } },
+      scales:{
+        x:{ grid:{color:"rgba(27,38,32,.07)"}, min:0, ticks:{callback:(v)=>v+"%", font:{family:"IBM Plex Mono", size:11}} },
+        y:{ grid:{display:false}, ticks:{font:{family:"Inter", size:11}} }
+      }
+    }
+  });
+}
+
+function setupSegmentedControl(segId, callback){
+  document.querySelectorAll("#" + segId + " button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#" + segId + " button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      callback();
+    });
+  });
+}
+setupSegmentedControl("segTipoP", () => renderPanel2("P"));
+setupSegmentedControl("segTipoC", () => renderPanel2("C"));
+
+document.getElementById("searchP").addEventListener("input", () => renderPanel2("P"));
+document.getElementById("searchC").addEventListener("input", () => renderPanel2("C"));
+
+// Gerenciadores Globais de Expansão e Recolhimento dos Nós
+document.getElementById("expandAll1").onclick = () => document.querySelectorAll("#treeConsumo details").forEach(d=>d.open=true);
+document.getElementById("collapseAll1").onclick = () => document.querySelectorAll("#treeConsumo details").forEach(d=>d.open=false);
+document.getElementById("expandAllP").onclick = () => document.querySelectorAll("#treeP details").forEach(d=>d.open=true);
+document.getElementById("collapseAllP").onclick = () => document.querySelectorAll("#treeP details").forEach(d=>d.open=false);
+document.getElementById("expandAllC").onclick = () => document.querySelectorAll("#treeC details").forEach(d=>d.open=true);
+document.getElementById("collapseAllC").onclick = () => document.querySelectorAll("#treeC details").forEach(d=>d.open=false);
+
+// Navegação entre as Abas Principais
+document.querySelectorAll(".ledger-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".ledger-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tabpanel").forEach(p => p.classList.remove("active"));
     tab.classList.add("active");
-    document.getElementById("tab-"+tab.dataset.tab).classList.add("active");
+    document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
   });
-});
-document.querySelectorAll(".subtab-btn").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll(".subtab-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById("sub-pontuais").style.display = btn.dataset.sub==="pontuais" ? "block":"none";
-    document.getElementById("sub-consumo2").style.display = btn.dataset.sub==="consumo2" ? "block":"none";
-  });
-});
-document.getElementById("btnRefresh").addEventListener("click", (e)=>{
-  e.currentTarget.classList.add("spinning");
-  loadData();
-  setTimeout(()=>e.currentTarget.classList.remove("spinning"), 800);
 });
 
-/* =========================================================================
-   INIT
-   ========================================================================= */
+// Navegação entre as Sub-Abas do Painel 2
+document.querySelectorAll(".subtab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".subtab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("sub-pontuais").style.display = btn.dataset.sub === "pontuais" ? "block" : "none";
+    document.getElementById("sub-consumo2").style.display = btn.dataset.sub === "consumo2" ? "block" : "none";
+  });
+});
+
+document.getElementById("btnRefresh").addEventListener("click", (e) => {
+  e.currentTarget.classList.add("spinning");
+  loadData();
+  setTimeout(() => e.currentTarget.classList.remove("spinning"), 800);
+});
+
+function renderDiagnostics(headers){
+  const box = document.getElementById("diagBody");
+  box.innerHTML = `
+    <p>Leitura de Matriz Direta Praticada com Sucesso. Cabeçalhos Originais Identificados na Linha 1:</p>
+    <div class="mono" style="font-size:11px; max-height:200px; overflow-y:auto; background:#fff; padding:10px; border:1px solid var(--line); border-radius:6px; line-height:1.6;">
+      ${headers.map((h, i) => `<div><strong>${String.fromCharCode(65 + i)}</strong> (Índice ${i}): ${h}</div>`).join("")}
+    </div>
+  `;
+}
+
+// Inicialização Inicial Automatizada
 loadData();
 </script>
 </body>
