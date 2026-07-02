@@ -154,7 +154,7 @@ h1,h2,h3,.display{font-family:'Fraunces',serif;}
 }
 .seg button:last-child{border-right:none;}
 .seg button.active{background:var(--teal); color:#fff;}
-select.pi-select{
+select.pi-select, select.class-select {
   border:1px solid var(--line); border-radius:9px; padding:8px 12px; font-size:12.5px;
   background:#fff; font-family:'Inter',sans-serif; color:var(--ink); min-width:160px;
 }
@@ -373,6 +373,10 @@ footer.app-footer a{color:var(--teal-light);}
           <span class="filter-label">PI (coluna E)</span>
           <select class="pi-select" id="piSelect1"></select>
         </div>
+        <div class="filter-group">
+          <span class="filter-label">Classificação (coluna S)</span>
+          <select class="class-select" id="classSelect1"></select>
+        </div>
       </div>
 
       <div class="kpi-row" id="kpiRow1"></div>
@@ -385,7 +389,7 @@ footer.app-footer a{color:var(--teal-light);}
             <tbody></tbody>
             <tfoot></tfoot>
           </table>
-          <p class="note">Fórmula: <code>% a liquidar = (Empenhadas − Liquidadas) / Empenhadas</code>. "Serviços Fiotec" é o subconjunto de <code>Classificação = Serviços</code> cujo favorecido contém "FIOTEC"; o restante permanece em "Serviços".</p>
+          <p class="note">Fórmula: <code>% a liquidar = (Empenhadas − Liquidadas) / Empenhadas</code>. Valores calculados diretamente a partir dos nomes canônicos da coluna S.</p>
         </div>
         <div>
           <h3 class="section-title"><span class="n">02</span> % a liquidar por categoria</h3>
@@ -495,11 +499,17 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcgeHYoqpMtyGn
 
 const AGING_ORDER = ["1 - 30 dias","31 - 60 dias","61 - 90 dias","91 - 120 dias","121 - 220 dias","acima de 221 dias"];
 const AGING_COLORS = { "1 - 30 dias":"#3E7C59", "31 - 60 dias":"#7FA65C", "61 - 90 dias":"#C98A2B", "91 - 120 dias":"#C2762B", "121 - 220 dias":"#B5453B", "acima de 221 dias":"#7A2E27" };
-const CAT_COLORS = { "Condominiais":"#0E3B36","Diárias e passagens":"#175951","Material de Consumo":"#C08A2E","Pessoas":"#3E7C59","Serviços":"#6E7A76","Serviços Fiotec":"#B5453B" };
 
-let RAW = [];      // parsed + normalized rows
-let ELEMENTOS = []; // unique elemento despesa values
+// Cores base para o gráfico - gera fallback automático se vier algo novo do Excel
+const BASE_COLORS = ["#0E3B36", "#175951", "#C08A2E", "#3E7C59", "#6E7A76", "#B5453B", "#A43B84", "#2B6CB0"];
+function getChartColor(index) {
+  return BASE_COLORS[index % BASE_COLORS.length];
+}
+
+let RAW = [];       
+let ELEMENTOS = []; 
 let PIS = [];
+let CLASSIFICACOES = []; 
 let charts = {};
 
 /* =========================================================================
@@ -548,16 +558,6 @@ function normTipo(raw){
   if(n.includes("demand")) return "demanda";
   if(n.includes("continuo")) return "continuo";
   return "outro";
-}
-function classify(classificacaoRaw, favorecido){
-  const c = normHeader(classificacaoRaw);
-  const fav = normHeader(favorecido);
-  if(c === "servicos") return fav.includes("fiotec") ? "Serviços Fiotec" : "Serviços";
-  if(c.includes("diarias") && c.includes("passagens")) return "Diárias e passagens";
-  if(c === "condominiais") return "Condominiais";
-  if(c === "material de consumo") return "Material de Consumo";
-  if(c === "pessoas") return "Pessoas";
-  return null;
 }
 
 /* =========================================================================
@@ -658,24 +658,36 @@ function setStatus(state){
     text.textContent = "falha ao carregar a planilha";
   }
 }
+
 function buildRaw(rows, headers){
   const cols = resolveColumns(headers);
   if(!cols.elemento || !cols.classificacao){
     throw new Error("Colunas essenciais não encontradas no CSV.");
   }
+
+  // Primeiro passo: mapear os nomes exatos/reais para preservar a escrita idêntica do Excel
+  const rawClassificacoes = rows.map(r => String(r[cols.classificacao] || "").trim()).filter(Boolean);
+  const uniqueMap = {};
+  rawClassificacoes.forEach(val => {
+    const key = normHeader(val);
+    if (!uniqueMap[key]) uniqueMap[key] = val; 
+  });
+
   RAW = rows.map(r => {
     const elemento = String(r[cols.elemento]||"").trim();
     const empenhadas = parseNum(r[cols.empenhadas]);
     const liquidadas = parseNum(r[cols.liquidadas]);
-    const aLiquidar = parseNum(r[cols.aLiquidarCol]); // Resgata nativo da coluna P
+    const aLiquidar = parseNum(r[cols.aLiquidarCol]); 
     const favorecido = String(r[cols.favorecido]||"").trim() || "NÃO INFORMADO";
+    const rawClass = String(r[cols.classificacao] || "").trim();
+    const categoriaNormalizada = uniqueMap[normHeader(rawClass)] || null;
+
     return {
       favorecido,
       processo: String(r[cols.processo]||"").trim() || "—",
       pi: String(r[cols.pi]||"").trim() || "—",
       elemento,
-      classificacaoRaw: r[cols.classificacao],
-      categoria: classify(r[cols.classificacao], favorecido),
+      categoria: categoriaNormalizada, 
       empenhadas, liquidadas,
       aLiquidar,
       categoriaDias: String(r[cols.categoriaDias]||"").trim() || null,
@@ -685,6 +697,7 @@ function buildRaw(rows, headers){
 
   ELEMENTOS = [...new Set(RAW.map(r=>r.elemento))].sort((a,b)=> (parseInt(a)||0)-(parseInt(b)||0));
   PIS = [...new Set(RAW.map(r=>r.pi))].sort();
+  CLASSIFICACOES = [...new Set(RAW.map(r=>r.categoria).filter(Boolean))].sort();
 
   document.getElementById("rowCount").textContent = RAW.length.toLocaleString("pt-BR");
 
@@ -692,6 +705,7 @@ function buildRaw(rows, headers){
   buildElementoChips("chipsElementoP","P", ELEMENTOS.filter(e=>e!=="30"));
   buildElementoChips("chipsElementoC","C", ["30"]);
   buildPiSelect();
+  buildClassSelect();
 
   renderPanel1();
   renderPanel2("P");
@@ -771,12 +785,21 @@ document.querySelectorAll(".chip-actions button").forEach(btn=>{
     onFilterChange(target);
   });
 });
+
 function buildPiSelect(){
   const sel = document.getElementById("piSelect1");
   sel.innerHTML = `<option value="__todos__">Todos os PI</option>` + PIS.map(p=>`<option value="${p}">${p}</option>`).join("");
   sel.value = PIS.includes("A1IRR") ? "A1IRR" : "__todos__";
   sel.addEventListener("change", renderPanel1);
 }
+
+function buildClassSelect(){
+  const sel = document.getElementById("classSelect1");
+  sel.innerHTML = `<option value="__todas__">Todas as Classificações</option>` + CLASSIFICACOES.map(c=>`<option value="${c}">${c}</option>`).join("");
+  sel.value = "__todas__";
+  sel.addEventListener("change", renderPanel1);
+}
+
 function onFilterChange(target){
   if(target==="1") renderPanel1();
   if(target==="P") renderPanel2("P");
@@ -802,17 +825,20 @@ document.getElementById("searchP").addEventListener("input", ()=>renderPanel2("P
 document.getElementById("searchC").addEventListener("input", ()=>renderPanel2("C"));
 
 /* =========================================================================
-   PANEL 1 — MATERIAL DE CONSUMO (COGEPLAN %)
+   PANEL 1 — MATERIAL DE CONSUMO
    ========================================================================= */
 function renderPanel1(){
   const elementos = getCheckedElementos("chipsElemento1");
   const pi = document.getElementById("piSelect1").value;
+  const classeSelecionada = document.getElementById("classSelect1").value;
+
   let rows = RAW.filter(r => elementos.includes(r.elemento) && r.categoria);
   if(pi !== "__todos__") rows = rows.filter(r=>r.pi === pi);
+  if(classeSelecionada !== "__todas__") rows = rows.filter(r=>r.categoria === classeSelecionada);
 
-  const order = ["Condominiais","Diárias e passagens","Material de Consumo","Pessoas","Serviços","Serviços Fiotec"];
   const agg = {};
-  order.forEach(c=>agg[c] = {emp:0, liq:0, aliq:0});
+  CLASSIFICACOES.forEach(c => agg[c] = {emp:0, liq:0, aliq:0});
+
   rows.forEach(r=>{
     if(!agg[r.categoria]) return;
     agg[r.categoria].emp += r.empenhadas;
@@ -823,18 +849,35 @@ function renderPanel1(){
   const tbody = document.querySelector("#tableConsumo tbody");
   const tfoot = document.querySelector("#tableConsumo tfoot");
   tbody.innerHTML = "";
+  
   let totEmp=0, totLiq=0, totAliq=0;
   const chartLabels=[], chartData=[], chartColors=[];
-  order.forEach(cat=>{
-    const emp = agg[cat].emp, liq = agg[cat].liq, aliq = agg[cat].aliq;
+  
+  let colorIdx = 0;
+  CLASSIFICACOES.forEach(cat=>{
+    // Se um filtro de classificação específico estiver ativo, pula as outras linhas da tabela
+    if(classeSelecionada !== "__todas__" && cat !== classeSelecionada) return;
+
+    const emp = agg[cat].emp;
+    const liq = agg[cat].liq;
+    const aliq = agg[cat].aliq;
+    
+    // Ignora linhas completamente zeradas para limpar o visual
+    if(emp === 0 && liq === 0 && aliq === 0) return;
+
     const pct = emp!==0 ? aliq/emp : 0;
     totEmp += emp; totLiq += liq; totAliq += aliq;
+
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${cat}</td><td>${fmtNum(emp)}</td><td>${fmtNum(liq)}</td><td>${fmtNum(aliq)}</td>
       <td><span class="stamp ${stampClass(pct)}">${fmtPct(pct)}</span></td>`;
     tbody.appendChild(tr);
-    chartLabels.push(cat); chartData.push(+(pct*100).toFixed(2)); chartColors.push(CAT_COLORS[cat]);
+
+    chartLabels.push(cat); 
+    chartData.push(+(pct*100).toFixed(2)); 
+    chartColors.push(getChartColor(colorIdx++));
   });
+
   const totPct = totEmp!==0 ? totAliq/totEmp : 0;
   tfoot.innerHTML = `<tr><td>Total geral</td><td>${fmtNum(totEmp)}</td><td>${fmtNum(totLiq)}</td><td>${fmtNum(totAliq)}</td>
     <td><span class="stamp ${stampClass(totPct)}">${fmtPct(totPct)}</span></td></tr>`;
@@ -868,7 +911,7 @@ function drawBarChart(canvasId, labels, data, colors){
 }
 
 /* =========================================================================
-   PANEL 2 — DIAS A LIQUIDAR (shared renderer for P / C)
+   PANEL 2 — DIAS A LIQUIDAR
    ========================================================================= */
 function renderPanel2(target){
   const isP = target==="P";
@@ -924,7 +967,7 @@ function renderPanel2(target){
     }).join("");
   }
 
-  // drilldown tree: bucket -> favorecido -> processo
+  // drilldown tree
   const tree = {};
   rows.forEach(r=>{
     tree[r.categoriaDias] = tree[r.categoriaDias] || {};
