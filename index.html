@@ -664,7 +664,7 @@ document.querySelectorAll(".chip-actions button").forEach(btn => {
 });
 
 /* =========================================================================
-   RENDERIZAÇÃO PAINEL 01 - ATUALIZADO (Múltiplos Valores e Coluna C)
+   RENDERIZAÇÃO PAINEL 01 - ALINHAMENTO HORIZONTAL E PROCESSOS LIMPOS
    ========================================================================= */
 function renderPanel1(){
   const checkedElems = [...document.querySelectorAll("#chipsElemento1 input:checked")].map(i=>i.value);
@@ -716,7 +716,6 @@ function renderPanel1(){
       favSubMap[fName].liquidado += r.liqP1;
       favSubMap[fName].aLiquidar += r.aliqP1;
       
-      // Armazena o número do processo (vindo da Coluna C através do mapeamento da matriz)
       const pKey = r.procP1 || "—"; 
       if(!favSubMap[fName].procs[pKey]) favSubMap[fName].procs[pKey] = { emp:0, liq:0, aliq:0 };
       favSubMap[fName].procs[pKey].emp += r.empP1;
@@ -728,47 +727,49 @@ function renderPanel1(){
     const favHtml = Object.entries(favSubMap).sort((a,b)=>b[1].aLiquidar - a[1].aLiquidar).map(([favName, obj])=>{
       const pctFav = obj.empenhado !== 0 ? (obj.aLiquidar / obj.empenhado) : 0;
 
-      // Montagem do HTML dos Processos Reais da Coluna C (Nível 3)
+      // Montagem do HTML dos Processos (Nível 3) - Agora limpos, sem os subvalores repetidos
       const procHtml = Object.entries(obj.procs).sort((a,b)=>b[1].aliq - a[1].aliq).map(([procNum, v]) => {
-        const pctProc = v.emp !== 0 ? (v.aliq / v.emp) : 0;
         return `
-          <div class="proc-row">
-            <span class="pname" style="font-weight:600; color:var(--teal);">Proc: ${procNum}</span>
-            <span class="pval" style="color:var(--ink-soft); font-size:11.5px;">
-              Emp: ${fmtNum(v.emp)} | Liq: ${fmtNum(v.liq)} | A Liq: <strong style="color:var(--ink); font-size:12.5px;">${fmtBRL(v.aliq)}</strong>
-              <span class="stamp ${stampClass(pctProc)}" style="padding:1px 6px; font-size:10.5px; min-width:45px; margin-left:8px; border-width:1px;">${fmtPct(pctProc)}</span>
-            </span>
+          <div class="proc-row" style="padding: 10px 18px 10px 54px;">
+            <span class="pname" style="font-weight:600; color:var(--teal);">Processo: ${procNum}</span>
+            <span class="pval" style="font-weight:700; color:var(--ink);">${fmtBRL(v.aliq)}</span>
           </div>`;
       }).join("");
 
       return `
         <details class="fav">
-          <summary style="display:flex; align-items:center; justify-content:between; width:100%;">
+          <summary style="display:flex; align-items:center; justify-content:space-between; width:100%; white-space:nowrap;">
             <span class="arrow">▸</span>
-            <span class="fname" style="max-width:350px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${favName}</span>
-            <span class="fextra" style="flex:1; text-align:right; padding-right:10px; font-family:'IBM Plex Mono',monospace; font-size:12px;">
-              Emp: ${fmtNum(obj.empenhado)} | Liq: ${fmtNum(obj.liquidado)} | Saldo: <strong style="color:var(--gold); font-size:13px;">${fmtBRL(obj.aLiquidar)}</strong>
-            </span>
-            <span class="stamp ${stampClass(pctFav)}" style="transform: scale(0.85); margin-right:5px;">${fmtPct(pctFav)}</span>
+            <span class="fname" style="max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${favName}</span>
+            
+            <div style="display:flex; align-items:center; gap:24px; font-family:'IBM Plex Mono',monospace; font-size:12px; margin-left:auto; padding-right:20px;">
+              <div><span style="color:var(--ink-soft);">Emp:</span> <span>${fmtNum(obj.empenhado)}</span></div>
+              <div style="border-left: 1px solid var(--line); padding-left: 16px;"><span style="color:var(--ink-soft);">Liq:</span> <span>${fmtNum(obj.liquidado)}</span></div>
+              <div style="border-left: 1px solid var(--line); padding-left: 16px;"><span style="color:var(--ink-soft);">A Liq:</span> <span style="font-weight:700; color:var(--gold);">${fmtBRL(obj.aLiquidar)}</span></div>
+            </div>
+
+            <span class="stamp ${stampClass(pctFav)}" style="transform: scale(0.85); flex-shrink:0;">${fmtPct(pctFav)}</span>
           </summary>
           <div style="background:#fcfbf9;">${procHtml}</div>
         </details>`;
     }).join("");
 
-    // Montagem do Grupo de Classificação Principal (Nível 1)
+    // Montagem do Grupo de Classificação Principal (Nível 1) - Alinhado lado a lado como no Paint
     const bucketDetails = document.createElement("details");
     bucketDetails.className = "bucket";
     bucketDetails.innerHTML = `
-      <summary style="display:flex; align-items:center; justify-content:between; width:100%;">
+      <summary style="display:flex; align-items:center; justify-content:space-between; width:100%; white-space:nowrap;">
         <span class="arrow">▸</span>
         <span class="btag" style="background:${getChartColor(colorIdx)}"></span>
-        <span class="bname" style="font-size:14px; font-weight:700;">${cat}</span>
-        <span class="bvals" style="flex:1; text-align:right; padding-right:15px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft);">
-          Empenhado: <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.emp)}</span> | 
-          Liquidado: <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.liq)}</span> | 
-          A Liquidar: <span style="color:var(--teal); font-weight:700;">${fmtBRL(dataGrupo.aliq)}</span>
-        </span>
-        <span class="stamp ${stampClass(pctGrupo)}" style="transform: scale(0.95); margin-right:5px;">${fmtPct(pctGrupo)}</span>
+        <span class="bname" style="font-size:14px; font-weight:700; min-width:160px;">${cat}</span>
+        
+        <div style="display:flex; align-items:center; gap:28px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; margin-left:auto; padding-right:24px;">
+          <div><span style="color:var(--ink-soft);">Empenhado:</span> <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.emp)}</span></div>
+          <div style="border-left: 1.5px solid var(--ink); padding-left: 20px;"><span style="color:var(--ink-soft);">Liquidado:</span> <span style="color:var(--ink); font-weight:600;">${fmtNum(dataGrupo.liq)}</span></div>
+          <div style="border-left: 1.5px solid var(--ink); padding-left: 20px;"><span style="color:var(--ink-soft);">A Liquidar:</span> <span style="color:var(--teal); font-weight:700;">${fmtBRL(dataGrupo.aliq)}</span></div>
+        </div>
+
+        <span class="stamp ${stampClass(pctGrupo)}" style="transform: scale(0.95); flex-shrink:0; margin-right:5px;">${fmtPct(pctGrupo)}</span>
       </summary>
       <div style="padding: 4px 0; background: #fff;">${favHtml}</div>
     `;
