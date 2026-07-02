@@ -514,20 +514,28 @@ function loadData(){
   });
 }
 
+/* =========================================================================
+   PROCESSAMENTO DA MATRIZ - COM AGRUPAMENTO DE DIÁRIAS E PROMOCIONAL
+   ========================================================================= */
 function processMatrix(matrix){
   if(matrix.length < 2) return;
   const dataRows = matrix.slice(1); // Ignora linha do cabeçalho original
 
   RAW = dataRows.map((row, idx) => {
     // Mapeamento Direto Painel 1 (Base Retificada)
-    const favP1 = String(row[0] || "").trim();    // Coluna A
-    const procP1 = String(row[2] || "").trim();   // Coluna C (Adicionado/Garantido aqui)
-    const piP1 = String(row[3] || "").trim();     // Coluna D
-    const elemP1 = String(row[4] || "").trim();   // Coluna E
-    const empP1 = parseNum(row[7]);               // Coluna H
-    const liqP1 = parseNum(row[8]);               // Coluna I
-    const aliqP1 = parseNum(row[9]);              // Coluna J
-     let classP1 = String(row[10] || "").trim();   // Coluna K
+    const favP1 = String(row[0] || "").trim(); // Coluna A
+    const procP1 = String(row[2] || "").trim(); // Coluna C
+    const piP1 = String(row[3] || "").trim(); // Coluna D
+    const elemP1 = String(row[4] || "").trim(); // Coluna E
+    const empP1 = parseNum(row[7]); // Coluna H
+    const liqP1 = parseNum(row[8]); // Coluna I
+    const aliqP1 = parseNum(row[9]); // Coluna J
+    let classP1 = String(row[10] || "").trim(); // Coluna K
+
+    // REGRA DE OURO: Agrupamento inteligente para Diárias / Promocional
+    if(normHeader(classP1).includes("diaria") || normHeader(classP1).includes("promocional")){
+      classP1 = "Diárias e passagens";
+    }
 
     // Regra do Filtro Especial da FIOTEC
     if(favP1.toUpperCase().includes("FIOTEC - FUNDACAO PARA O DESENVOLVIMENTO")){
@@ -564,13 +572,13 @@ function processMatrix(matrix){
 
   // Construir Interfaces de Opções
   buildChipsGeneric("chipsElemento1", ELEMENTOS_P1, "1", true);
-  buildChipsGeneric("chipsElementoP", ELEMENTOS_P2, "P", false, "30"); // Desmarcar 30 por padrão nos pontuais
-  buildChipsGeneric("chipsElementoC", ELEMENTOS_P2, "C", false, "30", true); // Apenas 30 por padrão em consumo
+  buildChipsGeneric("chipsElementoP", ELEMENTOS_P2, "P", false, "30"); 
+  buildChipsGeneric("chipsElementoC", ELEMENTOS_P2, "C", false, "30", true); 
 
   buildClassificacaoP1Chips();
   buildPiDropdowns();
 
-  // Executar renderizações iniciais
+  // Executar renderizações
   renderPanel1();
   renderPanel2("P");
   renderPanel2("C");
