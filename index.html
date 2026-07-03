@@ -538,7 +538,10 @@ function processMatrix(matrix){
     }
 
     // Regra do Filtro Especial da FIOTEC
-    if(favP1.toUpperCase().includes("FIOTEC - FUNDACAO PARA O DESENVOLVIMENTO")){
+    // Usa normHeader() (remove acentos + minúsculas) para não perder linhas cujo texto
+    // do Favorecido venha acentuado ("FUNDAÇÃO") na planilha — isso fazia a soma da
+    // Fiotec no painel ficar divergente da tabela dinâmica do Excel.
+    if(normHeader(favP1).includes("fiotec")){
       classP1 = "Serviços Fiotec";
     }
 
@@ -732,7 +735,10 @@ function renderPanel1(){
     });
 
     // Montagem do HTML dos Favorecidos (Nível 2)
-    const favHtml = Object.entries(favSubMap).sort((a,b)=>b[1].aLiquidar - a[1].aLiquidar).map(([favName, obj])=>{
+    const favHtml = Object.entries(favSubMap)
+      // Oculta favorecidos já totalmente liquidados (A Liquidar = 0,00, incl. "-0,00" por arredondamento)
+      .filter(([favName, obj]) => Math.abs(obj.aLiquidar) >= 0.005)
+      .sort((a,b)=>b[1].aLiquidar - a[1].aLiquidar).map(([favName, obj])=>{
       const pctFav = obj.empenhado !== 0 ? (obj.aLiquidar / obj.empenhado) : 0;
 
       // Montagem do HTML dos Processos (Nível 3) - Agora limpos, sem os subvalores repetidos
