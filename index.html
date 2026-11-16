@@ -454,7 +454,11 @@ const AGING_ORDER = ["1 - 30 dias","31 - 60 dias","61 - 90 dias","91 - 120 dias"
 const AGING_COLORS = { "1 - 30 dias":"#3E7C59", "31 - 60 dias":"#7FA65C", "61 - 90 dias":"#C98A2B", "91 - 120 dias":"#C2762B", "121 - 220 dias":"#B5453B", "acima de 221 dias":"#7A2E27" };
 const BASE_COLORS = ["#0E3B36", "#175951", "#C08A2E", "#3E7C59", "#727272", "#B5453B", "#8C439E"];
 
-const CLASSIFICACOES_ALVO = ["Condominiais", "Diárias e passagens", "Material de Consumo", "Pessoas", "Serviços", "Serviços Fiotec"];
+const CLASSIFICACOES_ALVO = ["Condominiais", "Diárias e passagens", "Equip e Material Permanente", "Material de Consumo", "Pessoas", "Serviços", "Serviços Fiotec"];
+
+// Reserva: se a coluna K (Classificação) vier em branco na planilha do Drive (código de natureza
+// ainda ausente da tabela 'Classificação Cogeplan'), usa a natureza detalhada (coluna G).
+const NATUREZA_FALLBACK = { "33913917": "Serviços" };
 
 function getChartColor(index) { return BASE_COLORS[index % BASE_COLORS.length]; }
 
@@ -531,6 +535,8 @@ function processMatrix(matrix){
     const liqP1 = parseNum(row[8]); // Coluna I
     const aliqP1 = parseNum(row[9]); // Coluna J
     let classP1 = String(row[10] || "").trim(); // Coluna K
+
+    if(!classP1){ classP1 = NATUREZA_FALLBACK[String(row[6] || "").trim()] || ""; }
 
     // REGRA DE OURO: Agrupamento inteligente para Diárias / Promocional
     if(normHeader(classP1).includes("diaria") || normHeader(classP1).includes("promocional")){
